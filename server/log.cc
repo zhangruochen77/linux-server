@@ -286,4 +286,63 @@ namespace server
     public:
         StringFormatItem(const std::string fmt = "") {}
     };
+
+    /**
+     * 打印普通日志
+     * @param level 日志级别
+     * @param event 需要打印的事件信息
+     */
+    void Logger::log(LogLevel::Level level, LogEvent event)
+    {
+    }
+
+    /**
+     * debug 日志
+     */
+    void Logger::debug(LogEvent event)
+    {
+    }
+
+    /**
+     * warn 级别
+     */
+    void Logger::warn(LogEvent event)
+    {
+    }
+
+    /**
+     * error 级别
+     */
+    void Logger::error(LogEvent event)
+    {
+    }
+
+    /**
+     * fatal 级别
+     */
+    void Logger::fatal(LogEvent event)
+    {
+    }
+
+    /**
+     * 获取格式化器
+     */
+    LogFormmtter::ptr Logger::getLogFormatter()
+    {
+    }
+
+    /**
+     * 设置日志格式化器
+     */
+    void Logger::setLogFormatter(LogFormmtter::ptr formatter)
+    {
+    }
+
+    /**
+     * 设置指定字符串格式 生成一个日志格式化器
+     */
+    void Logger::setLogFormatter(const std::string &fmt)
+    {
+    }
+
 }
