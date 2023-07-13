@@ -5,6 +5,291 @@
 
 namespace server
 {
+    /**
+     * 消息格式化器
+     */
+    class MessageFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        MessageFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 日志级别格式化器
+     */
+    class LevelFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        LevelFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     *
+     */
+    class ElapseFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        ElapseFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 日志名称格式化器
+     */
+    class NameFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        NameFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 线程编号格式化器
+     */
+    class ThreadIdFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        ThreadIdFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 换行格式化器
+     */
+    class NewLineFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        NewLineFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 时间格式化器
+     */
+    class DateTimeFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        DateTimeFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 文件名称格式化器
+     */
+    class FilenameFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        FilenameFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 行号格式化器
+     */
+    class LineFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        LineFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * tab 格式化器
+     */
+    class TabFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        TabFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 协程格式化器
+     */
+    class FiberIdFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        FiberIdFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 线程格式化器
+     */
+    class ThreadNameFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        ThreadNameFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
+
+    /**
+     * 字符串格式化器
+     */
+    class StringFormatItem : public LogFormmtter::FormatItem
+    {
+    public:
+        StringFormatItem(const std::string fmt = "") {}
+
+        /**
+         * 纯虚函数
+         * 针对自己所能格式化的类型 与相应的参数进行格式化
+         * @param os 输出流 日志打印的位置
+         * @param logger 日志器
+         * @param level 打印日志级别
+         * @param event 日志事件 提供打印参数
+         */
+        void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+        {
+            std::cout << "string" << std::endl;
+        }
+    };
 
     /**
      * 初始化日志格式器 为解析格式设定初始值
@@ -171,164 +456,57 @@ namespace server
     }
 
     /**
-     * 消息格式化器
-     */
-    class MessageFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        MessageFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 日志级别格式化器
-     */
-    class LevelFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        LevelFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     *
-     */
-    class ElapseFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        ElapseFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 日志名称格式化器
-     */
-    class NameFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        NameFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 线程编号格式化器
-     */
-    class ThreadIdFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        ThreadIdFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 换行格式化器
-     */
-    class NewLineFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        NewLineFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 时间格式化器
-     */
-    class DateTimeFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        DateTimeFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 文件名称格式化器
-     */
-    class FilenameFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        FilenameFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 行号格式化器
-     */
-    class LineFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        LineFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * tab 格式化器
-     */
-    class TabFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        TabFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 协程格式化器
-     */
-    class FiberIdFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        FiberIdFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 线程格式化器
-     */
-    class ThreadNameFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        ThreadNameFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
-     * 字符串格式化器
-     */
-    class StringFormatItem : public LogFormmtter::FormatItem
-    {
-    public:
-        StringFormatItem(const std::string fmt = "") {}
-    };
-
-    /**
      * 打印普通日志
      * @param level 日志级别
      * @param event 需要打印的事件信息
      */
-    void Logger::log(LogLevel::Level level, LogEvent event)
+    void Logger::log(LogLevel::Level level, LogEvent::ptr event)
     {
+        auto self = shared_from_this();
+        for (auto e : m_formatter->m_items)
+        {
+            e->format(std::cout, self, level, event);
+        }
     }
 
     /**
      * debug 日志
      */
-    void Logger::debug(LogEvent event)
+    void Logger::debug(LogEvent::ptr event)
     {
+        this->log(this->m_level, event);
     }
 
     /**
      * warn 级别
      */
-    void Logger::warn(LogEvent event)
+    void Logger::warn(LogEvent::ptr event)
     {
+        this->log(this->m_level, event);
     }
 
     /**
      * error 级别
      */
-    void Logger::error(LogEvent event)
+    void Logger::error(LogEvent::ptr event)
     {
+        this->log(this->m_level, event);
     }
 
     /**
      * fatal 级别
      */
-    void Logger::fatal(LogEvent event)
+    void Logger::fatal(LogEvent::ptr event)
     {
+        this->log(this->m_level, event);
     }
 
     /**
      * 获取格式化器
      */
-    LogFormmtter::ptr Logger::getLogFormatter()
+    LogFormmtter::ptr Logger::getLogFormatter() const
     {
+        return this->m_formatter;
     }
 
     /**
@@ -336,6 +514,7 @@ namespace server
      */
     void Logger::setLogFormatter(LogFormmtter::ptr formatter)
     {
+        this->m_formatter = formatter;
     }
 
     /**
@@ -343,6 +522,25 @@ namespace server
      */
     void Logger::setLogFormatter(const std::string &fmt)
     {
+        this->m_formatter = std::make_shared<StringFormatItem>(fmt);
     }
 
+    /**
+     * 向标准输出流中打印日志
+     */
+    void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+    {
+        m_formatter->format(std::cout, logger, level, event);
+    }
+
+    /**
+     * 调用实际的执行器打印日志
+     */
+    void LogFormmtter::format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+    {
+        for (auto e : m_items)
+        {
+            e->format(os, logger, level, event);
+        }
+    }
 }

@@ -22,6 +22,7 @@ namespace server
      * 预定义 防止类查找不到存在
      */
     class LogEvent;
+    class Logger;
 
     /**
      * 日志级别类
@@ -64,12 +65,68 @@ namespace server
     };
 
     /**
+     * 日志事件 每次需要打印的日志 按照一个事件进行打印
+     */
+    class LogEvent
+    {
+    public:
+        typedef std::shared_ptr<LogEvent> ptr;
+
+        /**
+         * 构造器 进行日志事件信息的初始化
+         */
+        LogEvent(LogLevel::Level level, std::string file,
+                 uint32_t line, uint64_t elapse, uint32_t threadId,
+                 uint32_t fiberId, uint64_t time, std::string threadName)
+            : m_level(level),
+              m_file(file),
+              m_line(line),
+              m_elapse(elapse),
+              m_threadId(threadId),
+              m_fiberId(fiberId),
+              m_time(time),
+              m_threadName(threadName) {}
+
+        /**
+         * 基本成员的 get 方法 常量修饰 保证不会被意外更改
+         */
+        LogLevel::Level getLevel() const { return m_level; }
+        std::string getFile() const { return m_file; }
+        uint32_t getLine() { return m_line; }
+        uint64_t getElapse() { return m_elapse; }
+        uint32_t getThreadId() const { return m_threadId; }
+        uint32_t getFiberId() const { return m_fiberId; }
+        uint64_t getTime() const { return m_time; }
+        std::string getThreadName() const { return m_threadName; }
+
+    private:
+        LogLevel::Level m_level;  // 日志级别
+        std::string m_file;       // 文件名称
+        uint32_t m_line;          // 行号
+        uint64_t m_elapse;        // 程序启动毫秒数
+        uint32_t m_threadId;      // 线程编号
+        uint32_t m_fiberId;       // 协程编号
+        uint64_t m_time;          // 事件戳
+        std::string m_threadName; // 线程名称
+    };
+
+    /**
      * 日志格式化器
      */
     class LogFormmtter
     {
+        /**
+         * 设置友元类 提供 logger 访问权限
+         */
+        friend class Logger;
+
     public:
         typedef std::shared_ptr<LogFormmtter> ptr;
+
+        /**
+         * 日志打印操作
+         */
+        void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event);
 
         /**
          * 日志器
@@ -79,6 +136,16 @@ namespace server
         public:
             typedef std::shared_ptr<FormatItem> ptr;
             virtual ~FormatItem() {}
+
+            /**
+             * 纯虚函数
+             * 针对自己所能格式化的类型 与相应的参数进行格式化
+             * @param os 输出流 日志打印的位置
+             * @param logger 日志器
+             * @param level 打印日志级别
+             * @param event 日志事件 提供打印参数
+             */
+            virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
         };
 
     public:
@@ -93,9 +160,9 @@ namespace server
     };
 
     /**
-     * 日志处理类
+     * 日志处理类 开启自身自身共享
      */
-    class Logger
+    class Logger : public std::enable_shared_from_this<Logger>
     {
     public:
         typedef std::shared_ptr<Logger> ptr;
@@ -105,23 +172,23 @@ namespace server
          * @param level 日志级别
          * @param event 需要打印的事件信息
          */
-        void log(LogLevel::Level level, LogEvent event);
+        void log(LogLevel::Level level, LogEvent::ptr event);
         /**
          * debug 日志
          */
-        void debug(LogEvent event);
+        void debug(LogEvent::ptr event);
         /**
          * warn 级别
          */
-        void warn(LogEvent event);
+        void warn(LogEvent::ptr event);
         /**
          * error 级别
          */
-        void error(LogEvent event);
+        void error(LogEvent::ptr event);
         /**
          * fatal 级别
          */
-        void fatal(LogEvent event);
+        void fatal(LogEvent::ptr event);
 
         /**
          * 构造器 做日志器名称初始化
@@ -136,7 +203,7 @@ namespace server
         /**
          * 获取格式化器
          */
-        LogFormmtter::ptr getLogFormatter();
+        LogFormmtter::ptr getLogFormatter() const;
 
         /**
          * 设置日志格式化器
@@ -160,39 +227,32 @@ namespace server
     };
 
     /**
-     * 日志事件 每次需要打印的日志 按照一个事件进行打印
+     * 日志添加器
      */
-    class LogEvent
+    class LogAppender
     {
     public:
-        /**
-         * 构造器 进行日志事件信息的初始化
-         */
-        LogEvent(LogLevel::Level level, std::string file,
-                 uint32_t line, uint64_t elapse, uint32_t threadId,
-                 uint32_t fiberId, uint64_t time, std::string threadName);
+        typedef std::shared_ptr<LogAppender> ptr;
+        virtual ~LogAppender() {}
 
         /**
-         * 基本成员的 get 方法 常量修饰 保证不会被意外更改
+         * 打印日志
          */
-        LogLevel::Level getLevel() const { return m_level; }
-        std::string getFile() const { return m_file; }
-        uint32_t getLine() { return m_line; }
-        uint64_t getElapse() { return m_elapse; }
-        uint32_t getThreadId() const { return m_threadId; }
-        uint32_t getFiberId() const { return m_fiberId; }
-        uint64_t getTime() const { return m_time; }
-        std::string getThreadName() const { return m_threadName; }
+        virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
 
-    private:
-        LogLevel::Level m_level;  // 日志级别
-        std::string m_file;       // 文件名称
-        uint32_t m_line;          // 行号
-        uint64_t m_elapse;        // 程序启动毫秒数
-        uint32_t m_threadId;      // 线程编号
-        uint32_t m_fiberId;       // 协程编号
-        uint64_t m_time;          // 事件戳
-        std::string m_threadName; // 线程名称
+    protected:
+        LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
+        LogFormmtter::ptr m_formatter;                    // 日志格式化器
+        bool m_hasSelefFormatter;                         // 是否有自己的默认格式化器
+    };
+
+    /**
+     * 向控制台输出的日志打印器
+     */
+    class StdoutLogAppender : public LogAppender
+    {
+    public:
+        void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override;
     };
 }
 
