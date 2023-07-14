@@ -3,6 +3,8 @@
  */
 #include "log.h"
 
+#include <utility>
+
 namespace server
 {
     /**
@@ -11,7 +13,7 @@ namespace server
     class MessageFormatItem : public LogFormmtter::FormatItem
     {
     public:
-        MessageFormatItem(const std::string fmt = "") {}
+        MessageFormatItem(const std::string fmt = "") : m_message(fmt) {}
 
         /**
          * 纯虚函数
@@ -23,8 +25,11 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << this->m_message;
         }
+
+    private:
+        std::string m_message;
     };
 
     /**
@@ -45,12 +50,13 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            // TODO: 完成日志级别转换
+            os << "DEBUG";
         }
     };
 
     /**
-     *
+     * 程序启动时间格式化器
      */
     class ElapseFormatItem : public LogFormmtter::FormatItem
     {
@@ -67,7 +73,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << event->getElapse();
         }
     };
 
@@ -89,7 +95,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << logger->getName();
         }
     };
 
@@ -111,7 +117,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << event->getThreadId();
         }
     };
 
@@ -133,7 +139,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << "\n";
         }
     };
 
@@ -155,7 +161,8 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            // TODO: 时间转换
+            os << "时间:" << event->getTime();
         }
     };
 
@@ -177,7 +184,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << event->getFile();
         }
     };
 
@@ -199,7 +206,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << event->getLine();
         }
     };
 
@@ -221,7 +228,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << "\t";
         }
     };
 
@@ -243,7 +250,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << event->getFiberId();
         }
     };
 
@@ -265,7 +272,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << event->getThreadName();
         }
     };
 
@@ -275,7 +282,7 @@ namespace server
     class StringFormatItem : public LogFormmtter::FormatItem
     {
     public:
-        StringFormatItem(const std::string fmt = "") {}
+        StringFormatItem(const std::string fmt = "") : m_message(fmt) {}
 
         /**
          * 纯虚函数
@@ -287,8 +294,11 @@ namespace server
          */
         void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            std::cout << "string" << std::endl;
+            os << this->m_message;
         }
+
+    private:
+        std::string m_message;
     };
 
     /**
@@ -389,10 +399,10 @@ namespace server
                 if (!nstr.empty())
                 {
                     vec.push_back(std::make_tuple(nstr, std::string(), 0));
-                    std::cout << "nstr:" << nstr << std::endl;
+                    // std::cout << "nstr:" << nstr << std::endl;
                 }
                 vec.push_back(std::make_tuple(str, fmt, 1));
-                std::cout << "str:" << str << " fmt:" << std::endl;
+                // std::cout << "str:" << str << " fmt:" << std::endl;
             }
             else
             {
@@ -442,7 +452,7 @@ namespace server
             {
                 // 查看是否有满足的格式化器 有满足的格式化器 添加格式化器 否则添加字符串格式化器
                 auto it = item_map.find(std::get<0>(v));
-                if (item_map.end() == it)
+                if (item_map.end() != it)
                 {
                     // 函数回调 创建实例对象添加入集合
                     m_items.push_back(it->second(std::get<1>(v)));
@@ -460,19 +470,19 @@ namespace server
      * @param level 日志级别
      * @param event 需要打印的事件信息
      */
-    void Logger::log(LogLevel::Level level, LogEvent::ptr event)
+    void Logger::log(LogLevel::Level level, const LogEvent::ptr &event)
     {
         auto self = shared_from_this();
-        for (auto e : m_formatter->m_items)
+        for (const auto &e : m_appenders)
         {
-            e->format(std::cout, self, level, event);
+            e->log(self, level, event);
         }
     }
 
     /**
      * debug 日志
      */
-    void Logger::debug(LogEvent::ptr event)
+    void Logger::debug(const LogEvent::ptr &event)
     {
         this->log(this->m_level, event);
     }
@@ -480,7 +490,7 @@ namespace server
     /**
      * warn 级别
      */
-    void Logger::warn(LogEvent::ptr event)
+    void Logger::warn(const LogEvent::ptr &event)
     {
         this->log(this->m_level, event);
     }
@@ -488,7 +498,7 @@ namespace server
     /**
      * error 级别
      */
-    void Logger::error(LogEvent::ptr event)
+    void Logger::error(const LogEvent::ptr &event)
     {
         this->log(this->m_level, event);
     }
@@ -496,7 +506,7 @@ namespace server
     /**
      * fatal 级别
      */
-    void Logger::fatal(LogEvent::ptr event)
+    void Logger::fatal(const LogEvent::ptr &event)
     {
         this->log(this->m_level, event);
     }
@@ -514,7 +524,7 @@ namespace server
      */
     void Logger::setLogFormatter(LogFormmtter::ptr formatter)
     {
-        this->m_formatter = formatter;
+        this->m_formatter = std::move(formatter);
     }
 
     /**
@@ -522,7 +532,7 @@ namespace server
      */
     void Logger::setLogFormatter(const std::string &fmt)
     {
-        this->m_formatter = std::make_shared<StringFormatItem>(fmt);
+        this->m_formatter = std::make_shared<LogFormmtter>(fmt);
     }
 
     /**
@@ -530,16 +540,17 @@ namespace server
      */
     void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
     {
-        m_formatter->format(std::cout, logger, level, event);
+        logger->getLogFormatter()->format(std::cout, logger, level, event);
     }
 
     /**
      * 调用实际的执行器打印日志
      */
-    void LogFormmtter::format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+    void LogFormmtter::format(std::ostream &os, const std::shared_ptr<Logger> &logger, LogLevel::Level level, LogEvent::ptr event)
     {
-        for (auto e : m_items)
+        for (const auto &e : m_items)
         {
+            // std::cout << typeid(e).name() << std::endl;
             e->format(os, logger, level, event);
         }
     }

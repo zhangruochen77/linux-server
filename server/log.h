@@ -23,6 +23,7 @@ namespace server
      */
     class LogEvent;
     class Logger;
+    class LogAppender;
 
     /**
      * 日志级别类
@@ -126,7 +127,7 @@ namespace server
         /**
          * 日志打印操作
          */
-        void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event);
+        void format(std::ostream &os, const std::shared_ptr<Logger> &logger, LogLevel::Level level, LogEvent::ptr event);
 
         /**
          * 日志器
@@ -160,6 +161,26 @@ namespace server
     };
 
     /**
+     * 日志添加器
+     */
+    class LogAppender
+    {
+    public:
+        typedef std::shared_ptr<LogAppender> ptr;
+        virtual ~LogAppender() {}
+
+        /**
+         * 打印日志
+         */
+        virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
+
+    protected:
+        LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
+        LogFormmtter::ptr m_formatter;                    // 日志格式化器
+        bool m_hasSelefFormatter;                         // 是否有自己的默认格式化器
+    };
+
+    /**
      * 日志处理类 开启自身自身共享
      */
     class Logger : public std::enable_shared_from_this<Logger>
@@ -172,23 +193,23 @@ namespace server
          * @param level 日志级别
          * @param event 需要打印的事件信息
          */
-        void log(LogLevel::Level level, LogEvent::ptr event);
+        void log(LogLevel::Level level, const LogEvent::ptr &event);
         /**
          * debug 日志
          */
-        void debug(LogEvent::ptr event);
+        void debug(const LogEvent::ptr &event);
         /**
          * warn 级别
          */
-        void warn(LogEvent::ptr event);
+        void warn(const LogEvent::ptr &event);
         /**
          * error 级别
          */
-        void error(LogEvent::ptr event);
+        void error(const LogEvent::ptr &event);
         /**
          * fatal 级别
          */
-        void fatal(LogEvent::ptr event);
+        void fatal(const LogEvent::ptr &event);
 
         /**
          * 构造器 做日志器名称初始化
@@ -220,30 +241,16 @@ namespace server
          */
         std::string getName() const { return m_name; }
 
+        /**
+         * 添加日志输出器
+         */
+        void addAppender(const LogAppender::ptr &appender) { m_appenders.push_back(appender); }
+
     private:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 日志级别
         std::string m_name;                               // 日志器名称
         LogFormmtter::ptr m_formatter;                    // 格式化器
-    };
-
-    /**
-     * 日志添加器
-     */
-    class LogAppender
-    {
-    public:
-        typedef std::shared_ptr<LogAppender> ptr;
-        virtual ~LogAppender() {}
-
-        /**
-         * 打印日志
-         */
-        virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
-
-    protected:
-        LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
-        LogFormmtter::ptr m_formatter;                    // 日志格式化器
-        bool m_hasSelefFormatter;                         // 是否有自己的默认格式化器
+        std::vector<LogAppender::ptr> m_appenders;        // 输出器 向指定的位置进行输出
     };
 
     /**
@@ -252,6 +259,8 @@ namespace server
     class StdoutLogAppender : public LogAppender
     {
     public:
+        StdoutLogAppender(){};
+        ~StdoutLogAppender(){};
         void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override;
     };
 }
