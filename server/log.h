@@ -8,9 +8,29 @@
 #include <vector>
 #include <tuple>
 #include <iostream>
+#include <sstream>
 #include <memory>
 #include <map>
 #include <functional>
+#include <cstdarg> // va_list 头文件 va 系类头文件
+
+/**
+ * 定义打印日志宏
+ */
+#define LOGGER(logger, level)               \
+    if (logger->getLevel() <= level)        \
+    server::LogEventWrap(                   \
+        std::make_shared<server::LogEvent>( \
+            logger,                         \
+            level,                          \
+            __FILE__,                       \
+            __LINE__,                       \
+            1,                              \
+            1000,                           \
+            34234,                          \
+            234235623L,                     \
+            "main thread"))                 \
+        .getSs()
 
 /**
  * 将类与函数定义在自身的命名空间当中
@@ -62,6 +82,11 @@ namespace server
             FATAL = 5
         };
 
+        /**
+         * 转换日志级别为字符串
+         */
+        static const std::string toString(const LogLevel::Level &level);
+
     private:
     };
 
@@ -76,10 +101,11 @@ namespace server
         /**
          * 构造器 进行日志事件信息的初始化
          */
-        LogEvent(LogLevel::Level level, std::string file,
+        LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level, std::string file,
                  uint32_t line, uint64_t elapse, uint32_t threadId,
                  uint32_t fiberId, uint64_t time, std::string threadName)
-            : m_level(level),
+            : m_logger(logger),
+              m_level(level),
               m_file(file),
               m_line(line),
               m_elapse(elapse),
@@ -99,16 +125,39 @@ namespace server
         uint32_t getFiberId() const { return m_fiberId; }
         uint64_t getTime() const { return m_time; }
         std::string getThreadName() const { return m_threadName; }
+        std::shared_ptr<Logger> getLogger() const { return m_logger; }
+
+        /**
+         * stringstream 没有拷贝构造函数和赋值构造函数
+         */
+        std::stringstream &getSS() { return m_ss; }
+
+        /**
+         * @brief 格式化写入日志内容
+         */
+        void format(const char *fmt, ...);
+
+        /**
+         * @brief 格式化写入日志内容
+         */
+        void format(const char *fmt, va_list al);
+
+        /**
+         * 获取日志内容
+         */
+        std::string getContent() { return m_ss.str(); }
 
     private:
-        LogLevel::Level m_level;  // 日志级别
-        std::string m_file;       // 文件名称
-        uint32_t m_line;          // 行号
-        uint64_t m_elapse;        // 程序启动毫秒数
-        uint32_t m_threadId;      // 线程编号
-        uint32_t m_fiberId;       // 协程编号
-        uint64_t m_time;          // 事件戳
-        std::string m_threadName; // 线程名称
+        LogLevel::Level m_level;          // 日志级别
+        std::string m_file;               // 文件名称
+        uint32_t m_line;                  // 行号
+        uint64_t m_elapse;                // 程序启动毫秒数
+        uint32_t m_threadId;              // 线程编号
+        uint32_t m_fiberId;               // 协程编号
+        uint64_t m_time;                  // 事件戳
+        std::string m_threadName;         // 线程名称
+        std::stringstream m_ss;           // 日志输出流
+        std::shared_ptr<Logger> m_logger; // 所属的日志器
     };
 
     /**
@@ -127,7 +176,7 @@ namespace server
         /**
          * 日志打印操作
          */
-        void format(std::ostream &os, const std::shared_ptr<Logger> &logger, LogLevel::Level level, LogEvent::ptr event);
+        std::ostream &format(std::ostream &os, const std::shared_ptr<Logger> &logger, LogLevel::Level level, LogEvent::ptr event);
 
         /**
          * 日志器
@@ -212,9 +261,9 @@ namespace server
         void fatal(const LogEvent::ptr &event);
 
         /**
-         * 构造器 做日志器名称初始化
+         * 构造器 做日志器名称初始化 默认设置名称为 root
          */
-        Logger(const std::string &name) : m_name(name) {}
+        Logger(const std::string &name = "root") : m_name(name) {}
 
         /**
          * 销毁构造
@@ -246,6 +295,11 @@ namespace server
          */
         void addAppender(const LogAppender::ptr &appender) { m_appenders.push_back(appender); }
 
+        /**
+         * 获取日志级别
+         */
+        LogLevel::Level getLevel() const { return m_level; }
+
     private:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 日志级别
         std::string m_name;                               // 日志器名称
@@ -262,6 +316,54 @@ namespace server
         StdoutLogAppender(){};
         ~StdoutLogAppender(){};
         void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override;
+    };
+
+    /**
+     * 日志管理器
+     */
+    class LogManager
+    {
+    public:
+        /**
+         * 默认构造 初始化信息
+         */
+        LogManager();
+        ~LogManager() {}
+
+        /**
+         * 获取指定名称的日志器
+         */
+        Logger::ptr getLogger(const std::string &name) const;
+
+        /**
+         * 初始化方式
+         */
+        void init();
+
+        /**
+         * 获取主日志器
+         */
+        Logger::ptr getRoot() const;
+
+    private:
+        std::map<std::string, Logger::ptr> m_loggers; // 管理多个日志器 key-value pairs
+        Logger::ptr m_root;                           // 主日志器
+    };
+
+    class LogEventWrap
+    {
+    public:
+        LogEventWrap(LogEvent::ptr e) : m_event(e) {}
+        ~LogEventWrap();
+        LogEvent::ptr getEvent() const { return m_event; }
+
+        /**
+         * 获取日志流
+         */
+        std::stringstream &getSs();
+
+    private:
+        LogEvent::ptr m_event; // 存放日志事件
     };
 }
 

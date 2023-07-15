@@ -7,13 +7,37 @@
 
 namespace server
 {
+
+    const std::string LogLevel::toString(const LogLevel::Level &level)
+    {
+        switch (level)
+        {
+#define LOG_LEVEL(e)         \
+    case LogLevel::Level::e: \
+        return #e;           \
+        break;
+
+            LOG_LEVEL(UNKNOW);
+            LOG_LEVEL(DEBUG);
+            LOG_LEVEL(INFO);
+            LOG_LEVEL(WARN);
+            LOG_LEVEL(ERROR);
+            LOG_LEVEL(FATAL);
+#undef LOG_LEVEL
+
+        default:
+            return "UNKNOWN";
+        }
+
+        return "UNKNOWN";
+    }
     /**
      * 消息格式化器
      */
     class MessageFormatItem : public LogFormmtter::FormatItem
     {
     public:
-        MessageFormatItem(const std::string fmt = "") : m_message(fmt) {}
+        MessageFormatItem(const std::string fmt = "") {}
 
         /**
          * 纯虚函数
@@ -25,11 +49,8 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            os << this->m_message;
+            os << event->getContent();
         }
-
-    private:
-        std::string m_message;
     };
 
     /**
@@ -50,8 +71,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            // TODO: 完成日志级别转换
-            os << "DEBUG";
+            os << LogLevel::toString(level);
         }
     };
 
@@ -149,7 +169,13 @@ namespace server
     class DateTimeFormatItem : public LogFormmtter::FormatItem
     {
     public:
-        DateTimeFormatItem(const std::string fmt = "") {}
+        DateTimeFormatItem(const std::string fmt = "%Y-%m-%d %H:%M:%S") : m_fmt(fmt)
+        {
+            if (this->m_fmt.empty())
+            {
+                this->m_fmt = "%Y-%m-%d %H:%M:%S";
+            }
+        }
 
         /**
          * 纯虚函数
@@ -161,9 +187,16 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            // TODO: 时间转换
-            os << "时间:" << event->getTime();
+            struct tm time;
+            time_t t = event->getTime();
+            localtime_r(&t, &time);
+            char buf[64];
+            strftime(buf, sizeof(buf), m_fmt.c_str(), &time);
+            os << buf;
         }
+
+    private:
+        std::string m_fmt;
     };
 
     /**
@@ -374,9 +407,10 @@ namespace server
                     {
                         status = 0;
                         // str = m_pattern.substr(i + 1, begin - i - 1);
-                        fmt = m_pattern.substr(i + 1, begin - i - 1);
-                        nstr = m_pattern.substr(begin, n - 1);
+                        fmt = m_pattern.substr(begin + 1, n - begin - 1);
+                        // nstr = m_pattern.substr(begin, n - 1);
                         // std::cout << "nstr = " << nstr << std::endl;
+                        ++n;
                         break;
                     }
                 }
@@ -473,9 +507,12 @@ namespace server
     void Logger::log(LogLevel::Level level, const LogEvent::ptr &event)
     {
         auto self = shared_from_this();
-        for (const auto &e : m_appenders)
+        if (!m_appenders.empty())
         {
-            e->log(self, level, event);
+            for (const auto &e : m_appenders)
+            {
+                e->log(self, level, event);
+            }
         }
     }
 
@@ -544,14 +581,70 @@ namespace server
     }
 
     /**
-     * 调用实际的执行器打印日志
+     * 调用日志转换 返回存放进入的流数据
      */
-    void LogFormmtter::format(std::ostream &os, const std::shared_ptr<Logger> &logger, LogLevel::Level level, LogEvent::ptr event)
+    std::ostream &LogFormmtter::format(std::ostream &os, const std::shared_ptr<Logger> &logger, LogLevel::Level level, LogEvent::ptr event)
     {
         for (const auto &e : m_items)
         {
-            // std::cout << typeid(e).name() << std::endl;
             e->format(os, logger, level, event);
         }
+
+        return os;
+    }
+
+    /**
+     * 进行管理器初始化操作
+     */
+    LogManager::LogManager()
+    {
+        this->init();
+    }
+
+    /**
+     * 初始化 设置默认的管理器 设置 logger 默认 appender， 添加 logger 进入日志器集合进行管理
+     */
+    void LogManager::init()
+    {
+        this->m_root.reset(new Logger());                                 // 构建一个默认的 logger
+        this->m_root->addAppender(std::make_shared<StdoutLogAppender>()); // 添加一个控制台 appender
+        this->m_loggers[m_root->getName()] = m_root;                      // 添加 looger 进入日志器集合
+    }
+
+    void format(const char *fmt, ...)
+    {
+        va_list args;
+        va_start(args, fmt);
+        vprintf(fmt, args);
+        va_end(args);
+    }
+
+    void LogEvent::format(const char *fmt, va_list al)
+    {
+        char *buf = nullptr;
+        int len = vasprintf(&buf, fmt, al);
+        if (len != -1)
+        {
+            m_ss << std::string(buf, len);
+            free(buf);
+        }
+    }
+
+    /**
+     * 调用日志进行打印操作
+     * 正真的日志打印 是在这个对象结束的时候 进行的打印实现
+     * 通过其销毁函数 前面是对 event 需要打印的数据进行解析 以及所需要的数据进行构造
+     */
+    LogEventWrap::~LogEventWrap()
+    {
+        this->m_event->getLogger()->log(this->m_event->getLevel(), this->m_event);
+    }
+
+    /**
+     * 返回构建的日志流 用于插入后续数据 打印用户的日志信息
+     */
+    std::stringstream &LogEventWrap::getSs()
+    {
+        return this->m_event->getSS();
     }
 }

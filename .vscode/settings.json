@@ -34,6 +34,12 @@
         "utility": "cpp",
         "typeinfo": "cpp",
         "algorithm": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "chrono": "cpp",
+        "ctime": "cpp",
+        "iomanip": "cpp",
+        "ratio": "cpp",
+        "random": "cpp",
+        "strstream": "cpp"
     }
 }

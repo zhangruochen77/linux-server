@@ -9,6 +9,12 @@ int main()
     logger->setLogFormatter(fmt);
     logger->addAppender(appender);
 
-    server::LogEvent::ptr event = std::make_shared<server::LogEvent>(server::LogLevel::DEBUG, "file", 1, 1, 1, 1, 1, "threadName");
-    logger->log(server::LogLevel::DEBUG, event);
+    // server::LogEvent::ptr event = std::make_shared<server::LogEvent>(server::LogLevel::WARN, "file", 1, 1, 1, 1, 1, "threadName");
+    // logger->log(server::LogLevel::DEBUG, event);
+
+    // server::LogEventWrap(server::LogEvent::ptr(new server::LogEvent(logger, server::LogLevel::DEBUG,                                            \
+    //         __FILE__, __LINE__, 0, 1,
+    //         1, time(0), "hello"))).getSs() << "hello\n";
+
+    LOGGER(logger, server::LogLevel::DEBUG) << "hello";
 }
