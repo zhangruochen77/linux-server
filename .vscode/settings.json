@@ -40,6 +40,7 @@
         "iomanip": "cpp",
         "ratio": "cpp",
         "random": "cpp",
-        "strstream": "cpp"
+        "strstream": "cpp",
+        "mutex": "cpp"
     }
 }

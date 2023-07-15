@@ -3,11 +3,11 @@
  */
 #include "log.h"
 
-#include <utility>
-
 namespace server
 {
-
+    /**
+     * 转换日志级别为字符串类型
+     */
     const std::string LogLevel::toString(const LogLevel::Level &level)
     {
         switch (level)
@@ -93,7 +93,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            os << event->getElapse();
+            os << "start:" << event->getElapse();
         }
     };
 
@@ -137,7 +137,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            os << event->getThreadId();
+            os << "tId:" << event->getThreadId();
         }
     };
 
@@ -283,7 +283,7 @@ namespace server
          */
         virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
         {
-            os << event->getFiberId();
+            os << "fId:" << event->getFiberId();
         }
     };
 
@@ -500,6 +500,16 @@ namespace server
     }
 
     /**
+     * 构造器 做日志器名称初始化 默认设置名称为 root 打印级别为 debug 以及设置一个默认的打印器
+     */
+    Logger::Logger(const std::string &name)
+        : m_name(name),
+          m_level(LogLevel::Level::DEBUG)
+    {
+        this->m_formatter.reset(new LogFormmtter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
+    }
+
+    /**
      * 打印普通日志
      * @param level 日志级别
      * @param event 需要打印的事件信息
@@ -561,7 +571,20 @@ namespace server
      */
     void Logger::setLogFormatter(LogFormmtter::ptr formatter)
     {
-        this->m_formatter = std::move(formatter);
+        this->m_formatter = formatter;
+
+        // 查看输出器 输出器没有自身的格式化器 没有添加格式化器
+        if (!this->m_appenders.empty())
+        {
+            for (const auto &apd : this->m_appenders)
+            {
+                if (!apd->getHasSelfFormatter())
+                {
+                    apd->setFormatter(formatter);
+                    apd->setHashSelefFormatter(true);
+                }
+            }
+        }
     }
 
     /**
@@ -611,7 +634,10 @@ namespace server
         this->m_loggers[m_root->getName()] = m_root;                      // 添加 looger 进入日志器集合
     }
 
-    void format(const char *fmt, ...)
+    /**
+     * @brief 可变参数写入日志 这里可变参数化为 va List 通过便利 list 写入参数到输出流当中
+     */
+    void LogEvent::format(const char *fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
@@ -619,6 +645,9 @@ namespace server
         va_end(args);
     }
 
+    /**
+     * 将可变参数数据写入到输出流中
+     */
     void LogEvent::format(const char *fmt, va_list al)
     {
         char *buf = nullptr;

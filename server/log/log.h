@@ -11,11 +11,14 @@
 #include <sstream>
 #include <memory>
 #include <map>
-#include <functional>
-#include <cstdarg> // va_list 头文件 va 系类头文件
+#include <functional> // 函数式编程头文件
+#include <cstdarg>    // va_list 头文件 va 系类头文件
+
+#include "../utils/utils.h"
+#include "../utils/singleton.h"
 
 /**
- * 定义打印日志宏
+ * @brief 流式定义打印日志宏 编译执行时生产代码自动拼接
  */
 #define LOGGER(logger, level)               \
     if (logger->getLevel() <= level)        \
@@ -25,21 +28,92 @@
             level,                          \
             __FILE__,                       \
             __LINE__,                       \
-            1,                              \
-            1000,                           \
-            34234,                          \
-            234235623L,                     \
+            0,                              \
+            server::GetThreadId(),          \
+            server::GetFiberId(),           \
+            time(0),                        \
             "main thread"))                 \
         .getSs()
 
 /**
- * 将类与函数定义在自身的命名空间当中
+ * @brief debug 级别流式写入日志
+ */
+#define DEBUG(logger) LOGGER(logger, server::LogLevel::DEBUG)
+/**
+ * @brief info 级别流式写入日志
+ */
+#define INFO(logger) LOGGER(logger, server::LogLevel::INFO)
+/**
+ * @brief warn 级别流式写入日志
+ */
+#define WARN(logger) LOGGER(logger, server::LogLevel::WARN)
+/**
+ * @brief error 级别流式写入日志
+ */
+#define ERROR(logger) LOGGER(logger, server::LogLevel::ERROR)
+/**
+ * @brief fatal 级别流式写入日志
+ */
+#define FATAL(logger) LOGGER(logger, server::LogLevel::FATAL)
+
+/**
+ * @brief 格式化打印日志
+ */
+#define FMT_LOGGER(logger, level, fmt, ...)     \
+    if (logger->getLevel() <= level)            \
+        server::LogEventWrap(                   \
+            std::make_shared<server::LogEvent>( \
+                logger,                         \
+                level,                          \
+                __FILE__,                       \
+                __LINE__,                       \
+                0,                              \
+                server::GetThreadId(),          \
+                server::GetFiberId(),           \
+                time(0),                        \
+                "main thread"))                 \
+            .getEvent()                         \
+            ->format(fmt, __VA_ARGS__);
+
+/**
+ * @brief debug 格式化打印方式
+ */
+#define FMT_DEBUG(logger, fmt, ...) FMT_LOGGER(logger, server::LogLevel::Level::DEBUG, fmt, __VA_ARGS__)
+/**
+ * @brief info 格式化打印方式
+ */
+#define FMT_INFO(logger, fmt, ...) FMT_LOGGER(logger, server::LogLevel::Level::DEBUG, fmt, __VA_ARGS__)
+/**
+ * @brief warn 格式化打印方式
+ */
+#define FMT_WARN(logger, fmt, ...) FMT_LOGGER(logger, server::LogLevel::Level::DEBUG, fmt, __VA_ARGS__)
+/**
+ * @brief error 格式化打印方式
+ */
+#define FMT_ERROR(logger, fmt, ...) FMT_LOGGER(logger, server::LogLevel::Level::DEBUG, fmt, __VA_ARGS__)
+/**
+ * @brief fatal 格式化打印方式
+ */
+#define FMT_FATAL(logger, fmt, ...) FMT_LOGGER(logger, server::LogLevel::Level::DEBUG, fmt, __VA_ARGS__)
+
+/**
+ * @brief 获取主日志器
+ */
+#define SIG_LOG_ROOT() server::LogMgr::getInstance()->getRoot()
+
+/**
+ * @brief 通过名称获取日志器
+ */
+#define SIG_LOG_NAME(name) server::LogMgr::getInstance()->getLogger(name)
+
+/**
+ * @brief 将类与函数定义在自身的命名空间当中
  */
 namespace server
 {
 
     /**
-     * 预定义 防止类查找不到存在
+     * @brief 预定义 防止类查找不到存在
      */
     class LogEvent;
     class Logger;
@@ -223,6 +297,25 @@ namespace server
          */
         virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
 
+        /**
+         * 获取添加器自身的日志格式化器
+         */
+        LogFormmtter::ptr getFormatter() const { return m_formatter; }
+        /**
+         * 设置自身格式化器信息
+         */
+        void setFormatter(LogFormmtter::ptr ptr) { m_formatter = ptr; }
+
+        /**
+         * 获取是否具有自身格式化器标识
+         */
+        bool getHasSelfFormatter() const { return m_hasSelefFormatter; }
+
+        /**
+         * 设置自身格式化器标识
+         */
+        void setHashSelefFormatter(bool val) { m_hasSelefFormatter = val; }
+
     protected:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
         LogFormmtter::ptr m_formatter;                    // 日志格式化器
@@ -263,7 +356,7 @@ namespace server
         /**
          * 构造器 做日志器名称初始化 默认设置名称为 root
          */
-        Logger(const std::string &name = "root") : m_name(name) {}
+        Logger(const std::string &name = "root");
 
         /**
          * 销毁构造
@@ -343,7 +436,7 @@ namespace server
         /**
          * 获取主日志器
          */
-        Logger::ptr getRoot() const;
+        Logger::ptr getRoot() const { return m_root; };
 
     private:
         std::map<std::string, Logger::ptr> m_loggers; // 管理多个日志器 key-value pairs
@@ -365,6 +458,8 @@ namespace server
     private:
         LogEvent::ptr m_event; // 存放日志事件
     };
+
+    typedef server::Singleton<LogManager> LogMgr; // 单例的日志管理器
 }
 
 #endif

@@ -8,13 +8,9 @@ int main()
     server::Logger::ptr logger = std::make_shared<server::Logger>("server");
     logger->setLogFormatter(fmt);
     logger->addAppender(appender);
-
-    // server::LogEvent::ptr event = std::make_shared<server::LogEvent>(server::LogLevel::WARN, "file", 1, 1, 1, 1, 1, "threadName");
-    // logger->log(server::LogLevel::DEBUG, event);
-
-    // server::LogEventWrap(server::LogEvent::ptr(new server::LogEvent(logger, server::LogLevel::DEBUG,                                            \
-    //         __FILE__, __LINE__, 0, 1,
-    //         1, time(0), "hello"))).getSs() << "hello\n";
-
     LOGGER(logger, server::LogLevel::DEBUG) << "hello";
+    ERROR(logger) << "error";
+
+    FMT_ERROR(logger, "test fmt %s\n", "error");
+    INFO(SIG_LOG_ROOT()) << "test single log root";
 }
