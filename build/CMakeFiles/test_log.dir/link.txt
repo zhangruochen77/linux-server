@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/test_log.dir/tests/test_log.cc.o  -o ../bin/test_log -rdynamic ../lib/libserver.so -Wl,-rpath,/opt/rc/project/server/lib 
