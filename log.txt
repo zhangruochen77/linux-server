@@ -1,0 +1,29 @@
+2023-07-16 14:07:52	tId:4556	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 14:07:52	tId:4556	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 14:07:52	tId:4556	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	
+2023-07-16 14:08:29	tId:4784	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 14:08:29	tId:4784	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 14:08:29	tId:4784	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	
+2023-07-16 15:06:40	tId:23527	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	
+2023-07-16 15:06:40	tId:23527	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	
+2023-07-16 15:06:40	tId:23527	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	
+2023-07-16 15:13:51	tId:26057	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 15:13:51	tId:26057	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 15:13:51	tId:26057	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	
+2023-07-16 15:15:51	tId:26885	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 15:15:51	tId:26885	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 15:15:51	tId:26885	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	
+2023-07-16 15:22:56	tId:29632	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 15:22:56	tId:29632	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 15:22:56	tId:29632	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	test fmt error
+
+2023-07-16 15:23:16	tId:29835	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 15:23:16	tId:29835	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 15:23:16	tId:29835	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	test fmt error
+
+2023-07-16 15:23:28	tId:30140	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 15:23:28	tId:30140	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 15:23:28	tId:30140	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	test fmt error
+2023-07-16 15:28:14	tId:31941	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:12	hello
+2023-07-16 15:28:14	tId:31941	main thread	fId:1000	[ERROR]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:13	error
+2023-07-16 15:28:14	tId:31941	main thread	fId:1000	[DEBUG]	[server]	/opt/rc/project/linux-server/tests/test_log.cc:15	test fmt error

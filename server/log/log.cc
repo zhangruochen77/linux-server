@@ -640,7 +640,7 @@ namespace server
     {
         va_list args;
         va_start(args, fmt);
-        vprintf(fmt, args);
+        this->format(fmt, args);
         va_end(args);
     }
 
@@ -674,5 +674,43 @@ namespace server
     std::stringstream &LogEventWrap::getSs()
     {
         return this->m_event->getSS();
+    }
+
+    /**
+     * 初始化 负责文件的打开
+     */
+    FileLogAppender::FileLogAppender(const std::string &filename)
+    {
+        // 打开文件，转化为流 文件打开失败 直接抛出异常
+        this->m_ofstream.open(filename, std::ios::app | std::ios::out);
+        this->m_filename = filename;
+        this->m_lastTime = time(0);
+    }
+
+    /**
+     * 销毁，处理关闭文件流
+     */
+    FileLogAppender::~FileLogAppender()
+    {
+        this->m_ofstream.close();
+    }
+
+    /**
+     * 打印日志
+     */
+    void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
+    {
+        logger->getLogFormatter()->format(this->m_ofstream, logger, level, event);
+    }
+
+    /**
+     * @brief 重新打开文件流
+     */
+    bool FileLogAppender::reopen()
+    {
+        this->m_ofstream.close();
+        this->m_ofstream.open(this->m_filename, std::ios::app | std::ios::out);
+
+        return this->m_ofstream.is_open();
     }
 }

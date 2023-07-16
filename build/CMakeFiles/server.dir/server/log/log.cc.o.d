@@ -105,7 +105,11 @@ CMakeFiles/server.dir/server/log/log.cc.o: \
  /usr/include/c++/4.8.2/bits/locale_facets.tcc \
  /usr/include/c++/4.8.2/bits/basic_ios.tcc \
  /usr/include/c++/4.8.2/bits/ostream.tcc /usr/include/c++/4.8.2/istream \
- /usr/include/c++/4.8.2/bits/istream.tcc /usr/include/c++/4.8.2/sstream \
+ /usr/include/c++/4.8.2/bits/istream.tcc /usr/include/c++/4.8.2/fstream \
+ /usr/include/c++/4.8.2/bits/codecvt.h \
+ /usr/include/c++/4.8.2/x86_64-redhat-linux/bits/basic_file.h \
+ /usr/include/c++/4.8.2/x86_64-redhat-linux/bits/c++io.h \
+ /usr/include/c++/4.8.2/bits/fstream.tcc /usr/include/c++/4.8.2/sstream \
  /usr/include/c++/4.8.2/bits/sstream.tcc /usr/include/c++/4.8.2/memory \
  /usr/include/c++/4.8.2/bits/stl_tempbuf.h \
  /usr/include/c++/4.8.2/bits/stl_raw_storage_iter.h \

@@ -8,6 +8,7 @@
 #include <vector>
 #include <tuple>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <memory>
 #include <map>
@@ -118,6 +119,7 @@ namespace server
     class LogEvent;
     class Logger;
     class LogAppender;
+    class LogLevel;
 
     /**
      * 日志级别类
@@ -412,6 +414,34 @@ namespace server
     };
 
     /**
+     * 向文件输出的日志打印器
+     */
+    class FileLogAppender : public LogAppender
+    {
+    public:
+        FileLogAppender(const std::string &filename);
+        /**
+         * 关闭文件流
+         */
+        ~FileLogAppender();
+
+        /**
+         * @brief 重新打开文件流
+         */
+        bool reopen();
+
+        /**
+         * 打印日志
+         */
+        void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override;
+
+    private:
+        std::string m_filename;   // 输出日志文件名称
+        std::ofstream m_ofstream; // 输出文件流所在位置
+        uint64_t m_lastTime = 0;  // 上次打开时间
+    };
+
+    /**
      * 日志管理器
      */
     class LogManager
@@ -443,6 +473,10 @@ namespace server
         Logger::ptr m_root;                           // 主日志器
     };
 
+    /**
+     * @brief 日志交换器类 通过构建的 event 获取到其输出流
+     * 最后结果的输出，通过该类的析构函数实现 该类不保存变量 直接使用匿名方式
+     */
     class LogEventWrap
     {
     public:
