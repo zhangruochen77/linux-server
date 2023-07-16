@@ -195,8 +195,8 @@ namespace server
          */
         LogLevel::Level getLevel() const { return m_level; }
         std::string getFile() const { return m_file; }
-        uint32_t getLine() { return m_line; }
-        uint64_t getElapse() { return m_elapse; }
+        uint32_t getLine() const { return m_line; }
+        uint64_t getElapse() const { return m_elapse; }
         uint32_t getThreadId() const { return m_threadId; }
         uint32_t getFiberId() const { return m_fiberId; }
         uint64_t getTime() const { return m_time; }
