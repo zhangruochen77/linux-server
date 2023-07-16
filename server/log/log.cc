@@ -503,8 +503,7 @@ namespace server
      * 构造器 做日志器名称初始化 默认设置名称为 root 打印级别为 debug 以及设置一个默认的打印器
      */
     Logger::Logger(const std::string &name)
-        : m_name(name),
-          m_level(LogLevel::Level::DEBUG)
+        : m_level(LogLevel::Level::DEBUG), m_name(name)
     {
         this->m_formatter.reset(new LogFormmtter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
     }

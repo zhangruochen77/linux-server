@@ -222,6 +222,7 @@ namespace server
         std::string getContent() { return m_ss.str(); }
 
     private:
+        std::shared_ptr<Logger> m_logger; // 所属的日志器
         LogLevel::Level m_level;          // 日志级别
         std::string m_file;               // 文件名称
         uint32_t m_line;                  // 行号
@@ -231,7 +232,6 @@ namespace server
         uint64_t m_time;                  // 事件戳
         std::string m_threadName;         // 线程名称
         std::stringstream m_ss;           // 日志输出流
-        std::shared_ptr<Logger> m_logger; // 所属的日志器
     };
 
     /**
