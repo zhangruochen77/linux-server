@@ -42,6 +42,16 @@
         "random": "cpp",
         "strstream": "cpp",
         "mutex": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "string": "cpp",
+        "cstddef": "cpp",
+        "cstring": "cpp",
+        "atomic": "cpp",
+        "bitset": "cpp",
+        "complex": "cpp",
+        "list": "cpp",
+        "thread": "cpp",
+        "cfenv": "cpp",
+        "typeindex": "cpp"
     }
 }

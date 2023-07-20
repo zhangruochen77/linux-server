@@ -16,18 +16,26 @@ include_directories(.)
 set(LIB_SRC 
     server/log/log.cc
     server/utils/utils.cc
+    server/config/config.cc
     )
 
 # 添加共享库
 add_library(server SHARED ${LIB_SRC})
+# force_redefine_file_macro_for_sources(server)
 
 # 生成可执行文件 
 # add_executable( target sourceFile)
 # add_dependencies( target dependeceFiles)
 # target_link_libraries( target dependeceFiles)
+# log_test
 add_executable(test_log tests/test_log.cc)
 add_dependencies(test_log server)
 target_link_libraries(test_log server)
+
+# config_test
+add_executable(test_config tests/test_config.cc)
+add_dependencies(test_config server)
+target_link_libraries(test_config server)
 
 # 设置库文件以及可执行文件到 /bin 目录下
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
