@@ -145,6 +145,7 @@ server_EXTERNAL_OBJECTS =
 ../lib/libserver.so: CMakeFiles/server.dir/server/utils/utils.cc.o
 ../lib/libserver.so: CMakeFiles/server.dir/server/config/config.cc.o
 ../lib/libserver.so: CMakeFiles/server.dir/build.make
+../lib/libserver.so: /usr/local/lib/libyaml-cpp.so
 ../lib/libserver.so: CMakeFiles/server.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX shared library ../lib/libserver.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/server.dir/link.txt --verbose=$(VERBOSE)

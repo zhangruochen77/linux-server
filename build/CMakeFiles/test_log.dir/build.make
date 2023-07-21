@@ -93,7 +93,9 @@ test_log_EXTERNAL_OBJECTS =
 
 ../bin/test_log: CMakeFiles/test_log.dir/tests/test_log.cc.o
 ../bin/test_log: CMakeFiles/test_log.dir/build.make
+../bin/test_log: /usr/local/lib/libyaml-cpp.so
 ../bin/test_log: ../lib/libserver.so
+../bin/test_log: /usr/local/lib/libyaml-cpp.so
 ../bin/test_log: CMakeFiles/test_log.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../bin/test_log"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test_log.dir/link.txt --verbose=$(VERBOSE)

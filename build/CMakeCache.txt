@@ -168,8 +168,8 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 //Value Computed by CMake
 server_BINARY_DIR:STATIC=/opt/rc/project/server/build
 
-//Dependencies for target
-server_LIB_DEPENDS:STATIC=
+//Dependencies for the target
+server_LIB_DEPENDS:STATIC=general; /usr/local/lib/libyaml-cpp.so;
 
 //Value Computed by CMake
 server_SOURCE_DIR:STATIC=/opt/rc/project/server
