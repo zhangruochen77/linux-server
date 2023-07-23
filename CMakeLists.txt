@@ -15,7 +15,11 @@ include_directories(.)
 include_directories(/usr/local/include)
 
 # 导入动态库所在位置
-link_libraries(" /usr/local/lib/libyaml-cpp.so")
+# ubuntu
+# link_libraries(" /usr/local/lib/libyaml-cpp.so")
+
+# centos
+ link_libraries(" /usr/local/lib64/libyaml-cpp.so")
 
 # 添加源文件 设定源文件目标集合位置
 set(LIB_SRC 

@@ -12,7 +12,7 @@ server::ConfigVar<std::list<int>>::ptr g_int_list_value_config =
     server::Config::Lookup("system.int_list", std::list<int>{1, 2}, "system int list");
 
 server::ConfigVar<std::set<int>>::ptr g_int_set_value_config =
-        server::Config::Lookup("system.int_set", std::set<int>{1, 2}, "system int set"));
+    server::Config::Lookup("system.int_set", std::set<int>{1, 2}, "system int set");
 
 server::ConfigVar<std::unordered_set<int>>::ptr g_int_uset_value_config =
     server::Config::Lookup("system.int_uset", std::unordered_set<int>{1, 2}, "system int uset");
@@ -25,14 +25,43 @@ server::ConfigVar<std::unordered_map<std::string, int>>::ptr g_str_int_umap_valu
 
 void test_config()
 {
-    // INFO(SIG_LOG_ROOT())
-    //     << " val " << g_int_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_int_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_int_value_config->toString();
+    // INFO(SIG_LOG_ROOT()) << " val " << g_int_vec_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_int_vec_value_config->toString();
+    // INFO(SIG_LOG_ROOT()) << " val " << g_int_list_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_int_list_value_config->toString();
+    // INFO(SIG_LOG_ROOT()) << " val " << g_int_set_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_int_set_value_config->toString();
+    // INFO(SIG_LOG_ROOT()) << " val " << g_int_uset_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_int_uset_value_config->toString();
+    // INFO(SIG_LOG_ROOT()) << " val " << g_str_int_map_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_str_int_map_value_config->toString();
+    // INFO(SIG_LOG_ROOT()) << " val " << g_str_int_umap_value_config->getValue();
+    INFO(SIG_LOG_ROOT()) << " val " << g_str_int_umap_value_config->toString();
 
-    INFO(SIG_LOG_ROOT())
-        << " val " << std::dynamic_pointer_cast<server::ConfigVar<int>>(g_int_value_config)->getValue();
+#define CLO(l)                                  \
+    for (auto v : l)                            \
+    {                                           \
+        INFO(SIG_LOG_ROOT()) << " value " << v; \
+    }
 
-    INFO(SIG_LOG_ROOT())
-        << " val " << g_int_value_config->toString();
+#define MAP(m)               \
+    for (auto v : m)         \
+    {                        \
+        INFO(SIG_LOG_ROOT()) \
+            << " key "       \
+            << v.first       \
+            << " value "     \
+            << v.second;     \
+    }
+
+    CLO(g_int_vec_value_config->getValue());
+    CLO(g_int_list_value_config->getValue());
+    CLO(g_int_set_value_config->getValue());
+    CLO(g_int_uset_value_config->getValue());
+    MAP(g_str_int_map_value_config->getValue());
+    MAP(g_str_int_umap_value_config->getValue());
 }
 
 /**
@@ -90,18 +119,18 @@ void mult_config()
 
 void test_yml()
 {
-    YAML::Node root = YAML::LoadFile("/opt/rc/project/server/conf/log.yml");
-    print_yaml(root, 0);
-    INFO(SIG_LOG_ROOT()) << root["port"].IsDefined();
+    YAML::Node root = YAML::LoadFile("/opt/rc/project/linux-server/conf/log.yml");
+    // print_yaml(root, 0);
+    server::Config::LoadFromYaml(root);
 }
 
 int main()
 {
     // test_config();
-    // test_yml();
+    test_yml();
     // mult_config();
 
-    server::ConfigVar<int>::ptr p = server::Config::Lookup("server.port", (int)8080, "");
+    // server::ConfigVar<int>::ptr p = server::Config::Lookup("server.port", (int)8080, "");
     // p->getValue();
     return 0;
 }
