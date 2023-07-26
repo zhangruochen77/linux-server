@@ -1,12 +1,14 @@
 application:
   - name: root
     level: debug
+    formatter: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     appenders:
       - type: FileLogAppender
         file: file_log.txt
       - type: StdOutLogAppender
   - name: test
     level: debug
+    formatter: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     appenders:
       - type: FileLogAppender
         file: debug.txt

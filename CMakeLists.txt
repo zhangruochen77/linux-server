@@ -16,10 +16,10 @@ include_directories(/usr/local/include)
 
 # 导入动态库所在位置
 # ubuntu
-# link_libraries(" /usr/local/lib/libyaml-cpp.so")
+link_libraries(" /usr/local/lib/libyaml-cpp.so")
 
 # centos
- link_libraries(" /usr/local/lib64/libyaml-cpp.so")
+# link_libraries(" /usr/local/lib64/libyaml-cpp.so")
 
 # 添加源文件 设定源文件目标集合位置
 set(LIB_SRC 
@@ -43,8 +43,8 @@ add_library(server SHARED ${LIB_SRC})
 # target_link_libraries( target dependeceFiles)
 # log_test
 add_executable(test_log tests/test_log.cc)
-add_dependencies(test_log server)
-target_link_libraries(test_log server)
+add_dependencies(test_log server libyaml-cpp.so)
+target_link_libraries(test_log server libyaml-cpp.so)
 
 # config_test
 add_executable(test_config tests/test_config.cc)

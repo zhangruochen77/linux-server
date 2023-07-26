@@ -94,6 +94,9 @@ void test_yml()
 void test_toYaml()
 {
     std::cout << server::LogManager::toYamlString(SIG_LOG_ROOT()) << std::endl; // 打印日志的 yaml 格式
+
+    YAML::Node root = YAML::LoadFile("/opt/rc/project/server/conf/application.yml");
+    server::Config::LoadFromYaml(root);
 }
 
 int main()

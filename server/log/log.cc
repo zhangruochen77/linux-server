@@ -36,7 +36,7 @@ namespace server
     /**
      * 从字符串中转换日志级别
      */
-    LogLevel::Level FromString(const std::string &str)
+    LogLevel::Level LogLevel::FromString(const std::string &str)
     {
 #define FROM_STRING(level, value) \
     if (#value == str)            \
@@ -802,6 +802,11 @@ namespace server
         int type = 0;          // file -> 1      stdout -> 2
         std::string file;      // 文件名称
         std::string formatter; // 格式化模板
+
+        bool operator==(const LogAppenderDefine &lad) const
+        {
+            return type == lad.type && file == lad.file && formatter == lad.formatter;
+        }
     };
 
     /**
@@ -813,6 +818,16 @@ namespace server
         LogLevel::Level level;                    // 日志级别
         std::vector<LogAppenderDefine> appenders; // 日志输出器集合
         std::string formatter;                    // 日志格式化模板
+
+        bool operator==(const LogDefine &ld) const
+        {
+            return name == ld.name && level == ld.level && appenders == ld.appenders && formatter == ld.formatter;
+        }
+
+        bool operator<(const LogDefine &ld) const
+        {
+            return name < ld.name;
+        }
     };
 
     /**
@@ -849,14 +864,14 @@ namespace server
             }
 
             // 解析格式化器
-            if (!node["fommatter"].IsDefined())
+            if (!node["formatter"].IsDefined())
             {
-                std::cout << "can't find fommatter in application to " << ld.name << std::endl;
-                throw std::logic_error(std::string("can't find fommatter in application to ") + ld.name);
+                std::cout << "can't find formatter in application to " << ld.name << std::endl;
+                throw std::logic_error(std::string("can't find formatter in application to ") + ld.name);
             }
             else
             {
-                ld.formatter = node["fommatter"].as<std::string>();
+                ld.formatter = node["formatter"].as<std::string>();
             }
 
             // 解析日志输出器
@@ -928,16 +943,21 @@ namespace server
             node["name"] = ld.name;
             node["level"] = LogLevel::toString(ld.level);
             node["formatter"] = ld.formatter;
-            if (!ld.appenders.empty()) {
-                for (auto lad : ld.appenders) {
+            if (!ld.appenders.empty())
+            {
+                for (auto lad : ld.appenders)
+                {
                     YAML::Node n;
-                    if (1 ==  lad.type) {
+                    if (1 == lad.type)
+                    {
                         n["type"] = "FileLogAppender";
                         n["file"] = lad.file;
-                    } else if (2 == lad.type) {
+                    }
+                    else if (2 == lad.type)
+                    {
                         n["type"] = "StdOutLogAppender";
                     }
-                
+
                     n["formatter"] = lad.formatter;
                     node["appenders"].push_back(n);
                 }
@@ -946,4 +966,31 @@ namespace server
             return ss.str();
         }
     };
+
+    server::ConfigVar<std::set<LogDefine>>::ptr g_log_defines = server::Config::Lookup("application", std::set<LogDefine>(), "logs config");
+
+    /**
+     * looger 的全局初始化方式 进行回调函数的设置 对logger进行更新操作
+     */
+    struct LogIniter
+    {
+        LogIniter()
+        {
+            g_log_defines->addListener(
+                [](const std::set<LogDefine> &oldVal, const std::set<LogDefine> &newVal)
+                {
+                    std::cout << " log define on change callback " << std::endl;
+                    // TODO 添加 old 没有 new 有
+
+                    // TODO 更新 old 有 new 有 更新字段
+
+                    // TODO 删除 old 有 new 没有 删除
+                });
+        }
+    };
+
+    /**
+     * 进行初始化操作 设置回调函数 构建静态变量 优先调用构造函数 进行logger回调函数的设置
+     */
+    static server::LogIniter __log_init;
 }

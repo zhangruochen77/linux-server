@@ -59,7 +59,7 @@ namespace server
     };
 
     /**
-     * 定义从 from 类型到 target 类型的基本转换
+     * 定义从 from 类型到 target 类型的基本转换 偏特化模板
      */
     template <class F, class T>
     class LexicalCast
@@ -341,6 +341,7 @@ namespace server
     {
     public:
         typedef std::shared_ptr<ConfigVar> ptr;
+        typedef std::function<void(const T &oldVal, const T &newVal)> on_change_callback; // 自定义回调函数模板
         /**
          * 初始化构造函数 对变量名称以及变量描述，变量值进行初始化
          */
@@ -403,11 +404,69 @@ namespace server
             return typeid(this->m_val).name();
         }
 
-        void setValue(const T &val) { this->m_val = val; };
+        /**
+         * 设置变量值 并且调用回调函数
+         */
+        void setValue(const T &val)
+        {
+            // 没有更改值 返回即可
+            if (val == this->m_val)
+            {
+                return;
+            }
+            // 调用回调函数
+            for (auto &it : this->m_cbs)
+            {
+                it.second(this->m_val, val);
+            }
+
+            // 更新值返回
+            this->m_val = val;
+        };
+
+        /**
+         * 获取变量值
+         */
         const T getValue() const { return this->m_val; };
 
+        /**
+         * 添加监听事件
+         */
+        uint64_t addListener(on_change_callback cb)
+        {
+            static uint64_t cbKey = 0;
+            this->m_cbs[++cbKey] = cb;
+            return cbKey;
+        }
+
+        /**
+         * 获取监听事件
+         */
+        on_change_callback getListener(u_int64_t key)
+        {
+            on_change_callback cb = this->m_cbs.find(key);
+            return this->m_cbs.end() == cb ? nullptr : cb;
+        }
+
+        /**
+         * 删除监听事件
+         */
+        void delListener(u_int64_t key)
+        {
+            this->m_cbs.erase(key);
+        }
+
+        /**
+         * 清空监听事件
+         */
+        void flushListener()
+        {
+            this->m_cbs.clear();
+        }
+
     private:
-        T m_val; // 存放的变量值
+        T m_val;                                       // 存放的变量值
+        std::map<u_int64_t, on_change_callback> m_cbs; // 回调函数集合
     };
 
     /**
