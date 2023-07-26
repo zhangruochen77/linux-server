@@ -12,7 +12,7 @@ server::ConfigVar<std::list<int>>::ptr g_int_list_value_config =
     server::Config::Lookup("system.int_list", std::list<int>{1, 2}, "system int list");
 
 server::ConfigVar<std::set<int>>::ptr g_int_set_value_config =
-        server::Config::Lookup("system.int_set", std::set<int>{1, 2}, "system int set"));
+        server::Config::Lookup("system.int_set", std::set<int>{1, 2}, "system int set");
 
 server::ConfigVar<std::unordered_set<int>>::ptr g_int_uset_value_config =
     server::Config::Lookup("system.int_uset", std::unordered_set<int>{1, 2}, "system int uset");
@@ -84,15 +84,16 @@ void print_yaml(const YAML::Node &node, int level)
     }
 }
 
-void mult_config()
-{
-}
-
 void test_yml()
 {
     YAML::Node root = YAML::LoadFile("/opt/rc/project/server/conf/log.yml");
     print_yaml(root, 0);
     INFO(SIG_LOG_ROOT()) << root["port"].IsDefined();
+}
+
+void test_toYaml()
+{
+    std::cout << server::LogManager::toYamlString(SIG_LOG_ROOT()) << std::endl; // 打印日志的 yaml 格式
 }
 
 int main()
@@ -101,7 +102,9 @@ int main()
     // test_yml();
     // mult_config();
 
-    server::ConfigVar<int>::ptr p = server::Config::Lookup("server.port", (int)8080, "");
-    // p->getValue();
+    // server::ConfigVar<int>::ptr p = server::Config::Lookup("server.port", (int)8080, "");
+    // p->getValue(); 
+
+    test_toYaml();
     return 0;
 }

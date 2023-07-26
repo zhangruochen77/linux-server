@@ -12,6 +12,7 @@
 #include <sstream>
 #include <memory>
 #include <map>
+#include <yaml-cpp/yaml.h>
 #include <functional> // 函数式编程头文件
 #include <cstdarg>    // va_list 头文件 va 系类头文件
 
@@ -162,6 +163,11 @@ namespace server
          * 转换日志级别为字符串
          */
         static const std::string toString(const LogLevel::Level &level);
+
+        /**
+         * 转换字符串为日志级别
+         */
+        static LogLevel::Level FromString(const std::string &str);
 
     private:
     };
@@ -318,6 +324,11 @@ namespace server
          */
         void setHashSelefFormatter(bool val) { m_hasSelefFormatter = val; }
 
+        /**
+         * 转换日志格式 yaml
+         */
+        virtual std::string toYamlString() = 0;
+
     protected:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
         LogFormmtter::ptr m_formatter;                    // 日志格式化器
@@ -395,6 +406,11 @@ namespace server
          */
         LogLevel::Level getLevel() const { return m_level; }
 
+        /**
+         * 转换为 yaml 格式
+         */
+        std::string toYamlString();
+
     private:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 日志级别
         std::string m_name;                               // 日志器名称
@@ -411,6 +427,10 @@ namespace server
         StdoutLogAppender(){};
         ~StdoutLogAppender(){};
         void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override;
+        /**
+         * 转换日志格式 yaml
+         */
+        std::string toYamlString() override;
     };
 
     /**
@@ -434,6 +454,11 @@ namespace server
          * 打印日志
          */
         void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override;
+
+        /**
+         * 转换日志格式 yaml
+         */
+        std::string toYamlString() override;
 
     private:
         std::string m_filename;   // 输出日志文件名称
@@ -467,6 +492,11 @@ namespace server
          * 获取主日志器
          */
         Logger::ptr getRoot() const { return m_root; };
+
+        /**
+         * 转换 yaml 格式
+         */
+        static std::string toYamlString(Logger::ptr logger);
 
     private:
         std::map<std::string, Logger::ptr> m_loggers; // 管理多个日志器 key-value pairs

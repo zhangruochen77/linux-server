@@ -49,6 +49,8 @@ memory
 -
 map
 -
+yaml-cpp/yaml.h
+-
 functional
 -
 cstdarg

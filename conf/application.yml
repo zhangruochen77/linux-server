@@ -1,0 +1,13 @@
+application:
+  - name: root
+    level: debug
+    appenders:
+      - type: FileLogAppender
+        file: file_log.txt
+      - type: StdOutLogAppender
+  - name: test
+    level: debug
+    appenders:
+      - type: FileLogAppender
+        file: debug.txt
+      - type: StdOutLogAppender

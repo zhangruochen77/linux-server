@@ -39,6 +39,8 @@ boost/lexical_cast.hpp
 /opt/rc/project/server/server/log/log.cc
 log.h
 /opt/rc/project/server/server/log/log.h
+../config/config.h
+/opt/rc/project/server/server/config/config.h
 
 /opt/rc/project/server/server/log/log.h
 string
@@ -56,6 +58,8 @@ sstream
 memory
 -
 map
+-
+yaml-cpp/yaml.h
 -
 functional
 -

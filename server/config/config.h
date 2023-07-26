@@ -340,7 +340,7 @@ namespace server
     class ConfigVar : public ConfigVarBase
     {
     public:
-        typedef std::shared_ptr<ConfigVar> prt;
+        typedef std::shared_ptr<ConfigVar<T>> prt;
         /**
          * 初始化构造函数 对变量名称以及变量描述，变量值进行初始化
          */

@@ -2,6 +2,7 @@
  * log 框架基本功能实现 cpp 文件
  */
 #include "log.h"
+#include "../config/config.h"
 
 namespace server
 {
@@ -31,6 +32,33 @@ namespace server
 
         return "UNKNOWN";
     }
+
+    /**
+     * 从字符串中转换日志级别
+     */
+    LogLevel::Level FromString(const std::string &str)
+    {
+#define FROM_STRING(level, value) \
+    if (#value == str)            \
+    {                             \
+        return level;             \
+    }
+
+        FROM_STRING(LogLevel::Level::DEBUG, debug);
+        FROM_STRING(LogLevel::Level::INFO, info);
+        FROM_STRING(LogLevel::Level::WARN, warn);
+        FROM_STRING(LogLevel::Level::ERROR, error);
+        FROM_STRING(LogLevel::Level::FATAL, fatal);
+
+        FROM_STRING(LogLevel::Level::DEBUG, DEBUG);
+        FROM_STRING(LogLevel::Level::INFO, INFO);
+        FROM_STRING(LogLevel::Level::WARN, WARN);
+        FROM_STRING(LogLevel::Level::ERROR, ERROR);
+        FROM_STRING(LogLevel::Level::FATAL, FATAL);
+#undef XX
+        return LogLevel::Level::UNKNOW;
+    }
+
     /**
      * 消息格式化器
      */
@@ -713,4 +741,209 @@ namespace server
 
         return this->m_ofstream.is_open();
     }
+
+    /**
+     * 转换 yaml 格式
+     */
+    std::string LogManager::toYamlString(Logger::ptr logger)
+    {
+        return logger->toYamlString();
+    }
+
+    /**
+     * 转换为 yaml 格式
+     */
+    std::string Logger::toYamlString()
+    {
+        std::stringstream ss;
+        YAML::Node node;
+        node["name"] = this->m_name;
+        node["level"] = LogLevel::toString(this->m_level);
+        node["formatter"] = this->m_formatter->m_pattern;
+        for (auto &i : this->m_appenders)
+        {
+            node["appenders"].push_back(YAML::Load(i->toYamlString()));
+        }
+
+        ss << node;
+        return ss.str();
+    }
+
+    /**
+     * 转换日志格式 yaml
+     */
+    std::string StdoutLogAppender ::toYamlString()
+    {
+        std::stringstream ss;
+        YAML::Node node;
+        node["type"] = "StdoutLogAppender";
+        ss << node;
+        return ss.str();
+    }
+
+    /**
+     * 转换日志格式 yaml
+     */
+    std::string FileLogAppender::toYamlString()
+    {
+        std::stringstream ss;
+        YAML::Node node;
+        node["type"] = "FileLogAppender";
+        node["file"] = this->m_filename;
+        ss << node;
+        return ss.str();
+    }
+
+    /**
+     * 定义日志输出器 yaml 对象格式
+     */
+    struct LogAppenderDefine
+    {
+        int type = 0;          // file -> 1      stdout -> 2
+        std::string file;      // 文件名称
+        std::string formatter; // 格式化模板
+    };
+
+    /**
+     * 定义日志对象 yaml 格式
+     */
+    struct LogDefine
+    {
+        std::string name;                         // 日志名称
+        LogLevel::Level level;                    // 日志级别
+        std::vector<LogAppenderDefine> appenders; // 日志输出器集合
+        std::string formatter;                    // 日志格式化模板
+    };
+
+    /**
+     * yaml 格式转 logger 偏特化
+     */
+    template <>
+    class LexicalCast<std::string, LogDefine>
+    {
+    public:
+        LogDefine operator()(const std::string &val)
+        {
+            LogDefine ld;                      // 偏特化返回结果
+            YAML::Node node = YAML::Load(val); // 加载值转换为 node 节点
+
+            // 解析日志名称
+            if (!node["name"].IsDefined())
+            {
+                std::cout << "can't find root name in application" << std::endl;
+                throw std::logic_error("can't find root name in application");
+            }
+            else
+            {
+                ld.name = node["name"].as<std::string>();
+            }
+
+            // 解析日志级别
+            if (node["level"].IsDefined())
+            {
+                ld.level = LogLevel::FromString(node["level"].as<std::string>());
+            }
+            else
+            {
+                ld.level = LogLevel::Level::UNKNOW;
+            }
+
+            // 解析格式化器
+            if (!node["fommatter"].IsDefined())
+            {
+                std::cout << "can't find fommatter in application to " << ld.name << std::endl;
+                throw std::logic_error(std::string("can't find fommatter in application to ") + ld.name);
+            }
+            else
+            {
+                ld.formatter = node["fommatter"].as<std::string>();
+            }
+
+            // 解析日志输出器
+            if (!node["appenders"].IsDefined())
+            {
+                std::cout << "can't find appenders in application to " << ld.name << std::endl;
+                throw std::logic_error(std::string("can't find appenders in application to ") + ld.name);
+            }
+            else
+            {
+                for (size_t i = 0; i < node["appenders"].size(); ++i)
+                {
+                    YAML::Node a = node["appenders"][i];
+                    LogAppenderDefine lad;
+                    if (!a["type"].IsDefined())
+                    {
+                        std::cout << "can't find appenders type in application to " << ld.name << std::endl;
+                        throw std::logic_error(std::string("can't find appenders type in application to ") + ld.name);
+                    }
+                    else if ("FileLogAppender" == a["type"].as<std::string>())
+                    {
+                        lad.type = 1;
+                        // 文件信息解析
+                        if (!a["file"].IsDefined())
+                        {
+                            std::cout << "can't find appenders file in application to " << ld.name << std::endl;
+                            throw std::logic_error(std::string("can't find appenders file in application to ") + ld.name);
+                        }
+                        else
+                        {
+                            lad.file = a["file"].as<std::string>();
+                        }
+                    }
+                    else if ("StdOutLogAppender" == a["type"].as<std::string>())
+                    {
+                        lad.type = 2;
+                    }
+                    else
+                    {
+                        std::cout << "unknow appenders type in application to " << ld.name << std::endl;
+                        throw std::logic_error(std::string("unknow") + a["type"].as<std::string>() + std::string("appenders type in application to ") + ld.name);
+                    }
+
+                    // 查看日志输出器是否有自己设定的格式化模板
+                    if (a["formatter"].IsDefined())
+                    {
+                        lad.formatter = a["formatter"].as<std::string>();
+                    }
+
+                    ld.appenders.push_back(lad);
+                }
+            }
+
+            return ld;
+        }
+    };
+
+    /**
+     * @brief 日志到 yaml 格式偏特化
+     */
+    template <>
+    class LexicalCast<LogDefine, std::string>
+    {
+    public:
+        std::string operator()(const LogDefine &ld)
+        {
+            std::stringstream ss;
+            YAML::Node node;
+            node["name"] = ld.name;
+            node["level"] = LogLevel::toString(ld.level);
+            node["formatter"] = ld.formatter;
+            if (!ld.appenders.empty()) {
+                for (auto lad : ld.appenders) {
+                    YAML::Node n;
+                    if (1 ==  lad.type) {
+                        n["type"] = "FileLogAppender";
+                        n["file"] = lad.file;
+                    } else if (2 == lad.type) {
+                        n["type"] = "StdOutLogAppender";
+                    }
+                
+                    n["formatter"] = lad.formatter;
+                    node["appenders"].push_back(n);
+                }
+            }
+
+            return ss.str();
+        }
+    };
 }
