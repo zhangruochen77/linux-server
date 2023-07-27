@@ -4,12 +4,12 @@ application:
     formatter: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     appenders:
       - type: FileLogAppender
-        file: file_log.txt
+        file: /opt/rc/project/server/log/file_log.txt
       - type: StdOutLogAppender
   - name: test
     level: debug
-    formatter: "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
+    formatter: "%d{%Y-%m-%d %H:%M:%S}%m%n"
     appenders:
       - type: FileLogAppender
-        file: debug.txt
+        file: /opt/rc/project/server/log/debug.txt
       - type: StdOutLogAppender

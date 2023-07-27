@@ -329,6 +329,11 @@ namespace server
          */
         virtual std::string toYamlString() = 0;
 
+        /**
+         * 设置日志级别
+        */
+       void setLevel(const LogLevel::Level &level) { m_level = level; }
+
     protected:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
         LogFormmtter::ptr m_formatter;                    // 日志格式化器
@@ -402,9 +407,19 @@ namespace server
         void addAppender(const LogAppender::ptr &appender) { m_appenders.push_back(appender); }
 
         /**
+         * 清空日志器
+         */
+        void clearAppenders(){this->m_appenders.clear();};
+
+        /**
          * 获取日志级别
          */
         LogLevel::Level getLevel() const { return m_level; }
+
+        /**
+         * 设置日志级别
+         */
+        void setLevel(const LogLevel::Level &level) { m_level = level; }
 
         /**
          * 转换为 yaml 格式
@@ -481,7 +496,12 @@ namespace server
         /**
          * 获取指定名称的日志器
          */
-        Logger::ptr getLogger(const std::string &name) const;
+        Logger::ptr getLogger(const std::string &name);
+
+        /**
+         * 删除日志器
+         */
+        void delLogger(const std::string &name);
 
         /**
          * 初始化方式

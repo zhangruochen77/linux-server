@@ -1,0 +1,10 @@
+2023-07-27 21:14:00	tId:6151	main thread	fId:1000	[INFO]	[test]	/opt/rc/project/server/tests/test_config.cc:102	hello test config and logger
+2023-07-27 21:14:472023-07-27 21:15:182023-07-27 21:15:36
+2023-07-27 21:16:30
+2023-07-27 21:16:32
+2023-07-27 21:16:32
+2023-07-27 21:16:33
+2023-07-27 21:16:34
+2023-07-27 21:16:34
+2023-07-27 21:16:58hello test config and logger
+2023-07-27 21:21:50hello test config and logger

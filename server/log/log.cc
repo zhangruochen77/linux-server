@@ -662,6 +662,14 @@ namespace server
     }
 
     /**
+     * 删除日志器
+     */
+    void LogManager::delLogger(const std::string &name)
+    {
+        this->m_loggers.erase(name);
+    }
+
+    /**
      * @brief 可变参数写入日志 这里可变参数化为 va List 通过便利 list 写入参数到输出流当中
      */
     void LogEvent::format(const char *fmt, ...)
@@ -748,6 +756,23 @@ namespace server
     std::string LogManager::toYamlString(Logger::ptr logger)
     {
         return logger->toYamlString();
+    }
+
+    /**
+     * 通过名称获取 logger
+     */
+    Logger::ptr LogManager::getLogger(const std::string &name)
+    {
+        auto pair = m_loggers.find(name);
+        if (m_loggers.end() != pair)
+        {
+            return pair->second;
+        }
+
+        Logger::ptr ptr = std::make_shared<Logger>(name);
+        m_loggers[name] = ptr;
+
+        return ptr;
     }
 
     /**
@@ -979,12 +1004,68 @@ namespace server
             g_log_defines->addListener(
                 [](const std::set<LogDefine> &oldVal, const std::set<LogDefine> &newVal)
                 {
-                    std::cout << " log define on change callback " << std::endl;
-                    // TODO 添加 old 没有 new 有
+                    for (auto &ld : newVal)
+                    {
+                        Logger::ptr logger;
 
-                    // TODO 更新 old 有 new 有 更新字段
+                        // 添加 old 没有 new 有
+                        if (oldVal.end() == oldVal.find(ld))
+                        {
+                            logger = SIG_LOG_NAME(ld.name);
+                        }
+                        // 更新 old 有 new 有 更新字段
+                        else
+                        {
+                            if (ld == *(oldVal.find(ld)))
+                            {
+                                continue;
+                            }
 
-                    // TODO 删除 old 有 new 没有 删除
+                            logger = SIG_LOG_NAME(ld.name);
+                        }
+
+                        if (!ld.formatter.empty())
+                        {
+                            logger->setLogFormatter(ld.formatter);
+                        }
+
+                        logger->setLevel(ld.level);
+                        if (!ld.appenders.empty())
+                        {
+                            logger->clearAppenders();
+                            for (auto &lad : ld.appenders)
+                            {
+                                LogAppender::ptr apd;
+                                if (1 == lad.type)
+                                {
+                                    apd.reset(new FileLogAppender(lad.file));
+                                }
+                                else if (2 == lad.type)
+                                {
+                                    apd.reset(new StdoutLogAppender());
+                                }
+
+                                if (!lad.formatter.empty())
+                                {
+                                    apd->setFormatter(std::make_shared<LogFormmtter>(lad.formatter));
+                                }
+
+                                apd->setLevel(ld.level);
+                                logger->addAppender(apd);
+                            }
+                        }
+                    }
+
+                    // 删除 old 有 new 没有 删除
+                    for (auto &ld : oldVal)
+                    {
+                        if (newVal.end() != newVal.find(ld))
+                        {
+                            Logger::ptr logger = SIG_LOG_NAME(ld.name);
+                            logger->clearAppenders();
+                            LogMgr::getInstance()->delLogger(ld.name);
+                        }
+                    }
                 });
         }
     };

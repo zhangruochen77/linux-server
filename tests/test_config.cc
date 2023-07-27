@@ -97,6 +97,12 @@ void test_toYaml()
 
     YAML::Node root = YAML::LoadFile("/opt/rc/project/server/conf/application.yml");
     server::Config::LoadFromYaml(root);
+
+    server::Logger::ptr test = SIG_LOG_NAME("test");
+    INFO(test) << "hello test config and logger";
+
+    std::cout << server::LogManager::toYamlString(SIG_LOG_NAME("test")) << std::endl;
+    std::cout << server::LogManager::toYamlString(SIG_LOG_NAME("root")) << std::endl;
 }
 
 int main()
