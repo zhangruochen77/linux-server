@@ -26,6 +26,7 @@ set(LIB_SRC
     server/log/log.cc
     server/utils/utils.cc
     server/config/config.cc
+    server/thread/thread.cc
     )
 
 set(LIBS
@@ -50,6 +51,11 @@ target_link_libraries(test_log server libyaml-cpp.so)
 add_executable(test_config tests/test_config.cc)
 add_dependencies(test_config server libyaml-cpp.so)
 target_link_libraries(test_config server libyaml-cpp.so)
+
+# thread_test
+add_executable(test_thread tests/test_thread.cc)
+add_dependencies(test_thread server libyaml-cpp.so)
+target_link_libraries(test_thread server libyaml-cpp.so)
 
 # 设置库文件以及可执行文件到 /bin 目录下
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

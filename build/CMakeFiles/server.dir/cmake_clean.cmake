@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/server.dir/server/log/log.cc.o"
   "CMakeFiles/server.dir/server/utils/utils.cc.o"
   "CMakeFiles/server.dir/server/config/config.cc.o"
+  "CMakeFiles/server.dir/server/thread/thread.cc.o"
   "../lib/libserver.pdb"
   "../lib/libserver.so"
 )

@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/opt/rc/project/server/server/config/config.cc" "/opt/rc/project/server/build/CMakeFiles/server.dir/server/config/config.cc.o"
   "/opt/rc/project/server/server/log/log.cc" "/opt/rc/project/server/build/CMakeFiles/server.dir/server/log/log.cc.o"
+  "/opt/rc/project/server/server/thread/thread.cc" "/opt/rc/project/server/build/CMakeFiles/server.dir/server/thread/thread.cc.o"
   "/opt/rc/project/server/server/utils/utils.cc" "/opt/rc/project/server/build/CMakeFiles/server.dir/server/utils/utils.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

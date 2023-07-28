@@ -59,17 +59,6 @@ CMAKE_BINARY_DIR = /opt/rc/project/server/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -80,6 +69,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -152,6 +152,19 @@ test_config/fast:
 	$(MAKE) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/build
 .PHONY : test_config/fast
 
+#=============================================================================
+# Target rules for targets named test_thread
+
+# Build rule for target.
+test_thread: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_thread
+.PHONY : test_thread
+
+# fast build rule for target.
+test_thread/fast:
+	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/build
+.PHONY : test_thread/fast
+
 server/config/config.o: server/config/config.cc.o
 
 .PHONY : server/config/config.o
@@ -205,6 +218,33 @@ server/log/log.s: server/log/log.cc.s
 server/log/log.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/log/log.cc.s
 .PHONY : server/log/log.cc.s
+
+server/thread/thread.o: server/thread/thread.cc.o
+
+.PHONY : server/thread/thread.o
+
+# target to build an object file
+server/thread/thread.cc.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/thread.cc.o
+.PHONY : server/thread/thread.cc.o
+
+server/thread/thread.i: server/thread/thread.cc.i
+
+.PHONY : server/thread/thread.i
+
+# target to preprocess a source file
+server/thread/thread.cc.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/thread.cc.i
+.PHONY : server/thread/thread.cc.i
+
+server/thread/thread.s: server/thread/thread.cc.s
+
+.PHONY : server/thread/thread.s
+
+# target to generate assembly for a file
+server/thread/thread.cc.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/thread.cc.s
+.PHONY : server/thread/thread.cc.s
 
 server/utils/utils.o: server/utils/utils.cc.o
 
@@ -287,23 +327,54 @@ tests/test_log.cc.s:
 	$(MAKE) -f CMakeFiles/test_log.dir/build.make CMakeFiles/test_log.dir/tests/test_log.cc.s
 .PHONY : tests/test_log.cc.s
 
+tests/test_thread.o: tests/test_thread.cc.o
+
+.PHONY : tests/test_thread.o
+
+# target to build an object file
+tests/test_thread.cc.o:
+	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.o
+.PHONY : tests/test_thread.cc.o
+
+tests/test_thread.i: tests/test_thread.cc.i
+
+.PHONY : tests/test_thread.i
+
+# target to preprocess a source file
+tests/test_thread.cc.i:
+	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.i
+.PHONY : tests/test_thread.cc.i
+
+tests/test_thread.s: tests/test_thread.cc.s
+
+.PHONY : tests/test_thread.s
+
+# target to generate assembly for a file
+tests/test_thread.cc.s:
+	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.s
+.PHONY : tests/test_thread.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... rebuild_cache"
 	@echo "... server"
 	@echo "... edit_cache"
 	@echo "... test_log"
 	@echo "... test_config"
-	@echo "... rebuild_cache"
+	@echo "... test_thread"
 	@echo "... server/config/config.o"
 	@echo "... server/config/config.i"
 	@echo "... server/config/config.s"
 	@echo "... server/log/log.o"
 	@echo "... server/log/log.i"
 	@echo "... server/log/log.s"
+	@echo "... server/thread/thread.o"
+	@echo "... server/thread/thread.i"
+	@echo "... server/thread/thread.s"
 	@echo "... server/utils/utils.o"
 	@echo "... server/utils/utils.i"
 	@echo "... server/utils/utils.s"
@@ -313,6 +384,9 @@ help:
 	@echo "... tests/test_log.o"
 	@echo "... tests/test_log.i"
 	@echo "... tests/test_log.s"
+	@echo "... tests/test_thread.o"
+	@echo "... tests/test_thread.i"
+	@echo "... tests/test_thread.s"
 .PHONY : help
 
 
