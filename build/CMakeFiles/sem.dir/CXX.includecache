@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+.././server/thread/mutex.h
+cstddef
+-
+iostream
+-
+pthread.h
+-
+semaphore.h
+-
+../utils/noncopyable.h
+.././server/utils/noncopyable.h
+
+.././server/utils/noncopyable.h
+
+/opt/rc/project/server/tests/sem.cc
+server/thread/mutex.h
+/opt/rc/project/server/tests/server/thread/mutex.h
+

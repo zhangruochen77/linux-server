@@ -533,6 +533,7 @@ namespace server
     Logger::Logger(const std::string &name)
         : m_level(LogLevel::Level::DEBUG), m_name(name)
     {
+        this->m_lock = new LockType();
         this->m_formatter.reset(new LogFormmtter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
     }
 
@@ -544,6 +545,7 @@ namespace server
     void Logger::log(LogLevel::Level level, const LogEvent::ptr &event)
     {
         auto self = shared_from_this();
+        LockType::Lock lock(m_lock);
         if (!m_appenders.empty())
         {
             for (const auto &e : m_appenders)

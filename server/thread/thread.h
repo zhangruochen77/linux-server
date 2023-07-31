@@ -7,6 +7,9 @@
 #include <pthread.h>
 #include <functional>
 #include <string>
+#include <atomic>
+
+#include "mutex.h"
 
 namespace server
 {
@@ -46,10 +49,11 @@ namespace server
         static void *run(void *args);
 
     private:
+        thread_cb m_cb;     // 线程执行回调函数
         pid_t m_pid;        // 线程编号
         std::string m_name; // 线程名称
         pthread_t m_thread; // 线程数据类型值
-        thread_cb m_cb;     // 线程执行回调函数
+        Semaphore m_sem;
     };
 
 }

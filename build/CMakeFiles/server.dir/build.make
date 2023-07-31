@@ -63,15 +63,15 @@ include CMakeFiles/server.dir/flags.make
 CMakeFiles/server.dir/server/log/log.cc.o: CMakeFiles/server.dir/flags.make
 CMakeFiles/server.dir/server/log/log.cc.o: ../server/log/log.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/server.dir/server/log/log.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/log/log.cc.o -c /opt/rc/project/server/server/log/log.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/log/log.cc.o -c /opt/rc/project/server/server/log/log.cc
 
 CMakeFiles/server.dir/server/log/log.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server/log/log.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/log/log.cc > CMakeFiles/server.dir/server/log/log.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/log/log.cc > CMakeFiles/server.dir/server/log/log.cc.i
 
 CMakeFiles/server.dir/server/log/log.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server/log/log.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/log/log.cc -o CMakeFiles/server.dir/server/log/log.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/log/log.cc -o CMakeFiles/server.dir/server/log/log.cc.s
 
 CMakeFiles/server.dir/server/log/log.cc.o.requires:
 
@@ -87,15 +87,15 @@ CMakeFiles/server.dir/server/log/log.cc.o.provides.build: CMakeFiles/server.dir/
 CMakeFiles/server.dir/server/utils/utils.cc.o: CMakeFiles/server.dir/flags.make
 CMakeFiles/server.dir/server/utils/utils.cc.o: ../server/utils/utils.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/server.dir/server/utils/utils.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/utils/utils.cc.o -c /opt/rc/project/server/server/utils/utils.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/utils/utils.cc.o -c /opt/rc/project/server/server/utils/utils.cc
 
 CMakeFiles/server.dir/server/utils/utils.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server/utils/utils.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/utils/utils.cc > CMakeFiles/server.dir/server/utils/utils.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/utils/utils.cc > CMakeFiles/server.dir/server/utils/utils.cc.i
 
 CMakeFiles/server.dir/server/utils/utils.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server/utils/utils.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/utils/utils.cc -o CMakeFiles/server.dir/server/utils/utils.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/utils/utils.cc -o CMakeFiles/server.dir/server/utils/utils.cc.s
 
 CMakeFiles/server.dir/server/utils/utils.cc.o.requires:
 
@@ -111,15 +111,15 @@ CMakeFiles/server.dir/server/utils/utils.cc.o.provides.build: CMakeFiles/server.
 CMakeFiles/server.dir/server/config/config.cc.o: CMakeFiles/server.dir/flags.make
 CMakeFiles/server.dir/server/config/config.cc.o: ../server/config/config.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/server.dir/server/config/config.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/config/config.cc.o -c /opt/rc/project/server/server/config/config.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/config/config.cc.o -c /opt/rc/project/server/server/config/config.cc
 
 CMakeFiles/server.dir/server/config/config.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server/config/config.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/config/config.cc > CMakeFiles/server.dir/server/config/config.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/config/config.cc > CMakeFiles/server.dir/server/config/config.cc.i
 
 CMakeFiles/server.dir/server/config/config.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server/config/config.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/config/config.cc -o CMakeFiles/server.dir/server/config/config.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/config/config.cc -o CMakeFiles/server.dir/server/config/config.cc.s
 
 CMakeFiles/server.dir/server/config/config.cc.o.requires:
 
@@ -135,15 +135,15 @@ CMakeFiles/server.dir/server/config/config.cc.o.provides.build: CMakeFiles/serve
 CMakeFiles/server.dir/server/thread/thread.cc.o: CMakeFiles/server.dir/flags.make
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/thread/thread.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/server.dir/server/thread/thread.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/thread/thread.cc.o -c /opt/rc/project/server/server/thread/thread.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/thread/thread.cc.o -c /opt/rc/project/server/server/thread/thread.cc
 
 CMakeFiles/server.dir/server/thread/thread.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server/thread/thread.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/thread/thread.cc > CMakeFiles/server.dir/server/thread/thread.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/thread/thread.cc > CMakeFiles/server.dir/server/thread/thread.cc.i
 
 CMakeFiles/server.dir/server/thread/thread.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server/thread/thread.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/thread/thread.cc -o CMakeFiles/server.dir/server/thread/thread.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/thread/thread.cc -o CMakeFiles/server.dir/server/thread/thread.cc.s
 
 CMakeFiles/server.dir/server/thread/thread.cc.o.requires:
 
@@ -156,12 +156,37 @@ CMakeFiles/server.dir/server/thread/thread.cc.o.provides: CMakeFiles/server.dir/
 CMakeFiles/server.dir/server/thread/thread.cc.o.provides.build: CMakeFiles/server.dir/server/thread/thread.cc.o
 
 
+CMakeFiles/server.dir/server/thread/mutex.cc.o: CMakeFiles/server.dir/flags.make
+CMakeFiles/server.dir/server/thread/mutex.cc.o: ../server/thread/mutex.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/server.dir/server/thread/mutex.cc.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/server.dir/server/thread/mutex.cc.o -c /opt/rc/project/server/server/thread/mutex.cc
+
+CMakeFiles/server.dir/server/thread/mutex.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server/thread/mutex.cc.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/server/thread/mutex.cc > CMakeFiles/server.dir/server/thread/mutex.cc.i
+
+CMakeFiles/server.dir/server/thread/mutex.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server/thread/mutex.cc.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/server/thread/mutex.cc -o CMakeFiles/server.dir/server/thread/mutex.cc.s
+
+CMakeFiles/server.dir/server/thread/mutex.cc.o.requires:
+
+.PHONY : CMakeFiles/server.dir/server/thread/mutex.cc.o.requires
+
+CMakeFiles/server.dir/server/thread/mutex.cc.o.provides: CMakeFiles/server.dir/server/thread/mutex.cc.o.requires
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/mutex.cc.o.provides.build
+.PHONY : CMakeFiles/server.dir/server/thread/mutex.cc.o.provides
+
+CMakeFiles/server.dir/server/thread/mutex.cc.o.provides.build: CMakeFiles/server.dir/server/thread/mutex.cc.o
+
+
 # Object files for target server
 server_OBJECTS = \
 "CMakeFiles/server.dir/server/log/log.cc.o" \
 "CMakeFiles/server.dir/server/utils/utils.cc.o" \
 "CMakeFiles/server.dir/server/config/config.cc.o" \
-"CMakeFiles/server.dir/server/thread/thread.cc.o"
+"CMakeFiles/server.dir/server/thread/thread.cc.o" \
+"CMakeFiles/server.dir/server/thread/mutex.cc.o"
 
 # External object files for target server
 server_EXTERNAL_OBJECTS =
@@ -170,10 +195,11 @@ server_EXTERNAL_OBJECTS =
 ../lib/libserver.so: CMakeFiles/server.dir/server/utils/utils.cc.o
 ../lib/libserver.so: CMakeFiles/server.dir/server/config/config.cc.o
 ../lib/libserver.so: CMakeFiles/server.dir/server/thread/thread.cc.o
+../lib/libserver.so: CMakeFiles/server.dir/server/thread/mutex.cc.o
 ../lib/libserver.so: CMakeFiles/server.dir/build.make
 ../lib/libserver.so: /usr/local/lib/libyaml-cpp.so
 ../lib/libserver.so: CMakeFiles/server.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX shared library ../lib/libserver.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library ../lib/libserver.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/server.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -185,6 +211,7 @@ CMakeFiles/server.dir/requires: CMakeFiles/server.dir/server/log/log.cc.o.requir
 CMakeFiles/server.dir/requires: CMakeFiles/server.dir/server/utils/utils.cc.o.requires
 CMakeFiles/server.dir/requires: CMakeFiles/server.dir/server/config/config.cc.o.requires
 CMakeFiles/server.dir/requires: CMakeFiles/server.dir/server/thread/thread.cc.o.requires
+CMakeFiles/server.dir/requires: CMakeFiles/server.dir/server/thread/mutex.cc.o.requires
 
 .PHONY : CMakeFiles/server.dir/requires
 

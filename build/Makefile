@@ -59,20 +59,9 @@ CMAKE_BINARY_DIR = /opt/rc/project/server/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	@echo "No interactive CMake dialog available..."
 	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
@@ -80,6 +69,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@echo "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -125,32 +125,6 @@ server: cmake_check_build_system
 server/fast:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
 .PHONY : server/fast
-
-#=============================================================================
-# Target rules for targets named test_log
-
-# Build rule for target.
-test_log: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_log
-.PHONY : test_log
-
-# fast build rule for target.
-test_log/fast:
-	$(MAKE) -f CMakeFiles/test_log.dir/build.make CMakeFiles/test_log.dir/build
-.PHONY : test_log/fast
-
-#=============================================================================
-# Target rules for targets named test_config
-
-# Build rule for target.
-test_config: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_config
-.PHONY : test_config
-
-# fast build rule for target.
-test_config/fast:
-	$(MAKE) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/build
-.PHONY : test_config/fast
 
 #=============================================================================
 # Target rules for targets named test_thread
@@ -219,6 +193,33 @@ server/log/log.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/log/log.cc.s
 .PHONY : server/log/log.cc.s
 
+server/thread/mutex.o: server/thread/mutex.cc.o
+
+.PHONY : server/thread/mutex.o
+
+# target to build an object file
+server/thread/mutex.cc.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/mutex.cc.o
+.PHONY : server/thread/mutex.cc.o
+
+server/thread/mutex.i: server/thread/mutex.cc.i
+
+.PHONY : server/thread/mutex.i
+
+# target to preprocess a source file
+server/thread/mutex.cc.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/mutex.cc.i
+.PHONY : server/thread/mutex.cc.i
+
+server/thread/mutex.s: server/thread/mutex.cc.s
+
+.PHONY : server/thread/mutex.s
+
+# target to generate assembly for a file
+server/thread/mutex.cc.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/mutex.cc.s
+.PHONY : server/thread/mutex.cc.s
+
 server/thread/thread.o: server/thread/thread.cc.o
 
 .PHONY : server/thread/thread.o
@@ -273,60 +274,6 @@ server/utils/utils.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/utils/utils.cc.s
 .PHONY : server/utils/utils.cc.s
 
-tests/test_config.o: tests/test_config.cc.o
-
-.PHONY : tests/test_config.o
-
-# target to build an object file
-tests/test_config.cc.o:
-	$(MAKE) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/tests/test_config.cc.o
-.PHONY : tests/test_config.cc.o
-
-tests/test_config.i: tests/test_config.cc.i
-
-.PHONY : tests/test_config.i
-
-# target to preprocess a source file
-tests/test_config.cc.i:
-	$(MAKE) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/tests/test_config.cc.i
-.PHONY : tests/test_config.cc.i
-
-tests/test_config.s: tests/test_config.cc.s
-
-.PHONY : tests/test_config.s
-
-# target to generate assembly for a file
-tests/test_config.cc.s:
-	$(MAKE) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/tests/test_config.cc.s
-.PHONY : tests/test_config.cc.s
-
-tests/test_log.o: tests/test_log.cc.o
-
-.PHONY : tests/test_log.o
-
-# target to build an object file
-tests/test_log.cc.o:
-	$(MAKE) -f CMakeFiles/test_log.dir/build.make CMakeFiles/test_log.dir/tests/test_log.cc.o
-.PHONY : tests/test_log.cc.o
-
-tests/test_log.i: tests/test_log.cc.i
-
-.PHONY : tests/test_log.i
-
-# target to preprocess a source file
-tests/test_log.cc.i:
-	$(MAKE) -f CMakeFiles/test_log.dir/build.make CMakeFiles/test_log.dir/tests/test_log.cc.i
-.PHONY : tests/test_log.cc.i
-
-tests/test_log.s: tests/test_log.cc.s
-
-.PHONY : tests/test_log.s
-
-# target to generate assembly for a file
-tests/test_log.cc.s:
-	$(MAKE) -f CMakeFiles/test_log.dir/build.make CMakeFiles/test_log.dir/tests/test_log.cc.s
-.PHONY : tests/test_log.cc.s
-
 tests/test_thread.o: tests/test_thread.cc.o
 
 .PHONY : tests/test_thread.o
@@ -360,11 +307,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
-	@echo "... server"
 	@echo "... edit_cache"
-	@echo "... test_log"
-	@echo "... test_config"
+	@echo "... server"
+	@echo "... rebuild_cache"
 	@echo "... test_thread"
 	@echo "... server/config/config.o"
 	@echo "... server/config/config.i"
@@ -372,18 +317,15 @@ help:
 	@echo "... server/log/log.o"
 	@echo "... server/log/log.i"
 	@echo "... server/log/log.s"
+	@echo "... server/thread/mutex.o"
+	@echo "... server/thread/mutex.i"
+	@echo "... server/thread/mutex.s"
 	@echo "... server/thread/thread.o"
 	@echo "... server/thread/thread.i"
 	@echo "... server/thread/thread.s"
 	@echo "... server/utils/utils.o"
 	@echo "... server/utils/utils.i"
 	@echo "... server/utils/utils.s"
-	@echo "... tests/test_config.o"
-	@echo "... tests/test_config.i"
-	@echo "... tests/test_config.s"
-	@echo "... tests/test_log.o"
-	@echo "... tests/test_log.i"
-	@echo "... tests/test_log.s"
 	@echo "... tests/test_thread.o"
 	@echo "... tests/test_thread.i"
 	@echo "... tests/test_thread.s"

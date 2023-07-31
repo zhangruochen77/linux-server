@@ -63,15 +63,15 @@ include CMakeFiles/test_log.dir/flags.make
 CMakeFiles/test_log.dir/tests/test_log.cc.o: CMakeFiles/test_log.dir/flags.make
 CMakeFiles/test_log.dir/tests/test_log.cc.o: ../tests/test_log.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/rc/project/server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_log.dir/tests/test_log.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_log.dir/tests/test_log.cc.o -c /opt/rc/project/server/tests/test_log.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_log.dir/tests/test_log.cc.o -c /opt/rc/project/server/tests/test_log.cc
 
 CMakeFiles/test_log.dir/tests/test_log.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_log.dir/tests/test_log.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/tests/test_log.cc > CMakeFiles/test_log.dir/tests/test_log.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/rc/project/server/tests/test_log.cc > CMakeFiles/test_log.dir/tests/test_log.cc.i
 
 CMakeFiles/test_log.dir/tests/test_log.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_log.dir/tests/test_log.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/tests/test_log.cc -o CMakeFiles/test_log.dir/tests/test_log.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/rc/project/server/tests/test_log.cc -o CMakeFiles/test_log.dir/tests/test_log.cc.s
 
 CMakeFiles/test_log.dir/tests/test_log.cc.o.requires:
 

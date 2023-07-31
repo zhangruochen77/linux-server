@@ -2,6 +2,8 @@
 #include "../utils/utils.h"
 #include "../utils/perror_utils.h"
 
+#include <iostream>
+
 namespace server
 {
     /**
@@ -32,9 +34,12 @@ namespace server
     void *Thread::run(void *args)
     {
         Thread *t = (Thread *)args;
+        thread_cb cb = t->m_cb;
+        // thread_cb cb;
+        // cb.swap(t->m_cb);
+        server::current_pname = t->m_name;
         t->m_pid = GetThreadId();
         server::current_pid = t->m_pid;
-        server::current_pname = t->m_name;
         if (pthread_setname_np(pthread_self(), t->m_name.substr(0, 15).c_str()))
         {
             if (errno == ERANGE)
@@ -47,7 +52,19 @@ namespace server
             }
         }
 
-        t->m_cb();
+        // 初始化线程完毕 即可释放线程
+        t->m_sem.notify();
+        // cb();
+        try
+        {
+            cb();
+        }
+        catch (std::exception &e)
+        {
+            std::cout << "函数回调引发异常:" << e.what() << std::endl;
+        }
+
+        return nullptr;
     }
 
     /**
@@ -72,6 +89,9 @@ namespace server
                 err("pthread_create: cannot create another thread and the cause is unknow ");
             }
         }
+
+        // 等待 确保线程启动
+        this->m_sem.wait();
     }
 
     /**

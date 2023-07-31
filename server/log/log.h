@@ -18,6 +18,7 @@
 
 #include "../utils/utils.h"
 #include "../utils/singleton.h"
+#include "../thread/mutex.h"
 
 /**
  * @brief 流式定义打印日志宏 编译执行时生产代码自动拼接
@@ -331,8 +332,8 @@ namespace server
 
         /**
          * 设置日志级别
-        */
-       void setLevel(const LogLevel::Level &level) { m_level = level; }
+         */
+        void setLevel(const LogLevel::Level &level) { m_level = level; }
 
     protected:
         LogLevel::Level m_level = LogLevel::Level::DEBUG; // 默认日志级别
@@ -347,6 +348,7 @@ namespace server
     {
     public:
         typedef std::shared_ptr<Logger> ptr;
+        typedef Mutex LockType;
 
         /**
          * 打印普通日志
@@ -409,7 +411,7 @@ namespace server
         /**
          * 清空日志器
          */
-        void clearAppenders(){this->m_appenders.clear();};
+        void clearAppenders() { this->m_appenders.clear(); };
 
         /**
          * 获取日志级别
@@ -431,6 +433,7 @@ namespace server
         std::string m_name;                               // 日志器名称
         LogFormmtter::ptr m_formatter;                    // 格式化器
         std::vector<LogAppender::ptr> m_appenders;        // 输出器 向指定的位置进行输出
+        LockType *m_lock;                                  // 锁 主要锁 appders
     };
 
     /**
