@@ -72,6 +72,26 @@ cstdarg
 ../thread/mutex.h
 /opt/rc/project/server/server/thread/mutex.h
 
+/opt/rc/project/server/server/thread/fiber.cc
+fiber.h
+/opt/rc/project/server/server/thread/fiber.h
+
+/opt/rc/project/server/server/thread/fiber.h
+memory
+-
+ucontext.h
+-
+functional
+-
+atomic
+-
+../log/log.h
+/opt/rc/project/server/server/log/log.h
+../config/config.h
+/opt/rc/project/server/server/config/config.h
+../utils/macro.h
+/opt/rc/project/server/server/utils/macro.h
+
 /opt/rc/project/server/server/thread/mutex.cc
 mutex.h
 /opt/rc/project/server/server/thread/mutex.h
@@ -114,6 +134,16 @@ atomic
 mutex.h
 /opt/rc/project/server/server/thread/mutex.h
 
+/opt/rc/project/server/server/utils/macro.h
+string
+-
+assert.h
+-
+utils.h
+/opt/rc/project/server/server/utils/utils.h
+../log/log.h
+/opt/rc/project/server/server/log/log.h
+
 /opt/rc/project/server/server/utils/noncopyable.h
 
 /opt/rc/project/server/server/utils/perror_utils.h
@@ -140,5 +170,15 @@ unistd.h
 sys/syscall.h
 -
 cstdint
+-
+execinfo.h
+-
+string
+-
+vector
+-
+sstream
+-
+cxxabi.h
 -
 

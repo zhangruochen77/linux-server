@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/server.dir/server/config/config.cc.o"
   "CMakeFiles/server.dir/server/thread/thread.cc.o"
   "CMakeFiles/server.dir/server/thread/mutex.cc.o"
+  "CMakeFiles/server.dir/server/thread/fiber.cc.o"
   "../lib/libserver.pdb"
   "../lib/libserver.so"
 )

@@ -57,6 +57,14 @@
         "unordered_set": "cpp",
         "map": "cpp",
         "condition_variable": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "config": "cpp",
+        "cassert": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "bit": "cpp",
+        "set": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp"
     }
 }

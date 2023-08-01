@@ -24,6 +24,7 @@ set(LIB_SRC
     server/config/config.cc
     server/thread/thread.cc
     server/thread/mutex.cc
+    server/thread/fiber.cc
     )
 
 # 添加共享库
@@ -48,9 +49,9 @@ set(LIBS
 # target_link_libraries(test_config PRIVATE ${LIBS})
 
 # # thread_test
-add_executable(test_thread tests/test_thread.cc)
-add_dependencies(test_thread ${LIBS})
-target_link_libraries(test_thread PRIVATE ${LIBS})
+# add_executable(test_thread tests/test_thread.cc)
+# add_dependencies(test_thread ${LIBS})
+# target_link_libraries(test_thread PRIVATE ${LIBS})
 
 # add_executable(test_mutex tests/test_mutex.cc)
 # add_dependencies(test_mutex ${LIBS})
@@ -64,6 +65,20 @@ target_link_libraries(test_thread PRIVATE ${LIBS})
 # add_dependencies(sem ${LIBS})
 # target_link_libraries(sem PRIVATE ${LIBS})
 
+# test_trace
+# add_executable(test_trace tests/test_trace.cc)
+# add_dependencies(test_trace ${LIBS})
+# target_link_libraries(test_trace PRIVATE ${LIBS})
+
+# test_assert
+# add_executable(test_assert tests/test_assert.cc)
+# add_dependencies(test_assert ${LIBS})
+# target_link_libraries(test_assert PRIVATE ${LIBS})
+
+# test_fiber
+add_executable(test_fiber tests/test_fiber.cc)
+add_dependencies(test_fiber ${LIBS})
+target_link_libraries(test_fiber PRIVATE ${LIBS})
 
 # 设置库文件以及可执行文件到 /bin 目录下
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

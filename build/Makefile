@@ -61,7 +61,7 @@ CMAKE_BINARY_DIR = /opt/rc/project/server/build
 
 # Special rule for the target edit_cache
 edit_cache:
-	@echo "No interactive CMake dialog available..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
 	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
@@ -72,7 +72,7 @@ edit_cache/fast: edit_cache
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
-	@echo "Running CMake to regenerate build system..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
 	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
@@ -127,17 +127,17 @@ server/fast:
 .PHONY : server/fast
 
 #=============================================================================
-# Target rules for targets named test_thread
+# Target rules for targets named test_fiber
 
 # Build rule for target.
-test_thread: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_thread
-.PHONY : test_thread
+test_fiber: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_fiber
+.PHONY : test_fiber
 
 # fast build rule for target.
-test_thread/fast:
-	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/build
-.PHONY : test_thread/fast
+test_fiber/fast:
+	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/build
+.PHONY : test_fiber/fast
 
 server/config/config.o: server/config/config.cc.o
 
@@ -192,6 +192,33 @@ server/log/log.s: server/log/log.cc.s
 server/log/log.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/log/log.cc.s
 .PHONY : server/log/log.cc.s
+
+server/thread/fiber.o: server/thread/fiber.cc.o
+
+.PHONY : server/thread/fiber.o
+
+# target to build an object file
+server/thread/fiber.cc.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/fiber.cc.o
+.PHONY : server/thread/fiber.cc.o
+
+server/thread/fiber.i: server/thread/fiber.cc.i
+
+.PHONY : server/thread/fiber.i
+
+# target to preprocess a source file
+server/thread/fiber.cc.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/fiber.cc.i
+.PHONY : server/thread/fiber.cc.i
+
+server/thread/fiber.s: server/thread/fiber.cc.s
+
+.PHONY : server/thread/fiber.s
+
+# target to generate assembly for a file
+server/thread/fiber.cc.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/fiber.cc.s
+.PHONY : server/thread/fiber.cc.s
 
 server/thread/mutex.o: server/thread/mutex.cc.o
 
@@ -274,32 +301,32 @@ server/utils/utils.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/utils/utils.cc.s
 .PHONY : server/utils/utils.cc.s
 
-tests/test_thread.o: tests/test_thread.cc.o
+tests/test_fiber.o: tests/test_fiber.cc.o
 
-.PHONY : tests/test_thread.o
+.PHONY : tests/test_fiber.o
 
 # target to build an object file
-tests/test_thread.cc.o:
-	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.o
-.PHONY : tests/test_thread.cc.o
+tests/test_fiber.cc.o:
+	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o
+.PHONY : tests/test_fiber.cc.o
 
-tests/test_thread.i: tests/test_thread.cc.i
+tests/test_fiber.i: tests/test_fiber.cc.i
 
-.PHONY : tests/test_thread.i
+.PHONY : tests/test_fiber.i
 
 # target to preprocess a source file
-tests/test_thread.cc.i:
-	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.i
-.PHONY : tests/test_thread.cc.i
+tests/test_fiber.cc.i:
+	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cc.i
+.PHONY : tests/test_fiber.cc.i
 
-tests/test_thread.s: tests/test_thread.cc.s
+tests/test_fiber.s: tests/test_fiber.cc.s
 
-.PHONY : tests/test_thread.s
+.PHONY : tests/test_fiber.s
 
 # target to generate assembly for a file
-tests/test_thread.cc.s:
-	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.s
-.PHONY : tests/test_thread.cc.s
+tests/test_fiber.cc.s:
+	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cc.s
+.PHONY : tests/test_fiber.cc.s
 
 # Help Target
 help:
@@ -308,15 +335,18 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... server"
 	@echo "... rebuild_cache"
-	@echo "... test_thread"
+	@echo "... server"
+	@echo "... test_fiber"
 	@echo "... server/config/config.o"
 	@echo "... server/config/config.i"
 	@echo "... server/config/config.s"
 	@echo "... server/log/log.o"
 	@echo "... server/log/log.i"
 	@echo "... server/log/log.s"
+	@echo "... server/thread/fiber.o"
+	@echo "... server/thread/fiber.i"
+	@echo "... server/thread/fiber.s"
 	@echo "... server/thread/mutex.o"
 	@echo "... server/thread/mutex.i"
 	@echo "... server/thread/mutex.s"
@@ -326,9 +356,9 @@ help:
 	@echo "... server/utils/utils.o"
 	@echo "... server/utils/utils.i"
 	@echo "... server/utils/utils.s"
-	@echo "... tests/test_thread.o"
-	@echo "... tests/test_thread.i"
-	@echo "... tests/test_thread.s"
+	@echo "... tests/test_fiber.o"
+	@echo "... tests/test_fiber.i"
+	@echo "... tests/test_fiber.s"
 .PHONY : help
 
 

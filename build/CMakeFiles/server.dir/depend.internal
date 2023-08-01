@@ -17,6 +17,16 @@ CMakeFiles/server.dir/server/log/log.cc.o
  /opt/rc/project/server/server/utils/noncopyable.h
  /opt/rc/project/server/server/utils/singleton.h
  /opt/rc/project/server/server/utils/utils.h
+CMakeFiles/server.dir/server/thread/fiber.cc.o
+ /opt/rc/project/server/server/config/config.h
+ /opt/rc/project/server/server/log/log.h
+ /opt/rc/project/server/server/thread/fiber.cc
+ /opt/rc/project/server/server/thread/fiber.h
+ /opt/rc/project/server/server/thread/mutex.h
+ /opt/rc/project/server/server/utils/macro.h
+ /opt/rc/project/server/server/utils/noncopyable.h
+ /opt/rc/project/server/server/utils/singleton.h
+ /opt/rc/project/server/server/utils/utils.h
 CMakeFiles/server.dir/server/thread/mutex.cc.o
  /opt/rc/project/server/server/thread/mutex.cc
  /opt/rc/project/server/server/thread/mutex.h
