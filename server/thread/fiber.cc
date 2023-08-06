@@ -4,8 +4,8 @@ namespace server
 {
     server::Logger::ptr g_log = SIG_LOG_NAME("system");
 
-    static thread_local Fiber::ptr s_main_fiber = nullptr;      // 当前协程主协程
-    static thread_local Fiber::ptr s_thread_fiber = nullptr;    // 当前线程中占据cpu的协程
+    static thread_local Fiber *s_main_fiber = nullptr;          // 当前协程主协程
+    static thread_local Fiber *s_thread_fiber = nullptr;        // 当前线程中占据cpu的协程
     static thread_local std::atomic<uint64_t> s_fiber_count(0); // 当前线程中协程数量
     static thread_local std::atomic<uint64_t> s_fiber_id(0);    // 当前线程中线程自增id
 
@@ -43,8 +43,8 @@ namespace server
         this->m_stack = MallocAllocator::Molloc(size);
         this->m_stacksize = size;
 
-        Fiber::ptr main = GetMain();
-        m_ctx.uc_link = &main->m_ctx; // 设定协程执行完毕返回主协程
+        GetMain();
+        m_ctx.uc_link = nullptr;
         m_ctx.uc_stack.ss_size = m_stacksize;
         m_ctx.uc_stack.ss_sp = m_stack;
         ASSERT_MSG(!(getcontext(&m_ctx)), "get context error");
@@ -60,7 +60,7 @@ namespace server
      */
     Fiber::~Fiber()
     {
-        std::cout << "~Fiber exec" << std::endl;
+        std::cout << "~Fiber exec " << this->m_id << std::endl;
         if (this->m_stack)
         {
             MallocAllocator::Free(this->m_stack);
@@ -81,8 +81,6 @@ namespace server
 
         m_state = State::INIT;
         m_cb = cb;
-        Fiber::ptr main = GetMain();
-        m_ctx.uc_link = &main->m_ctx;
         m_ctx.uc_stack.ss_sp = m_stack;
         m_ctx.uc_stack.ss_size = m_stacksize;
 
@@ -96,10 +94,12 @@ namespace server
      */
     void Fiber::swapIn()
     {
-        Fiber::ptr main = GetMain();
-        s_thread_fiber = shared_from_this();
+        Fiber* main = GetMain();
+        s_thread_fiber = this;
         m_state = State::EXEC;
-        swapcontext(&main->m_ctx, &m_ctx);
+        if (swapcontext(&main->m_ctx, &m_ctx))
+        {
+        }
     }
 
     /**
@@ -107,7 +107,7 @@ namespace server
      */
     void Fiber::swapOut()
     {
-        Fiber::ptr main = GetMain();
+        Fiber* main = GetMain();
         s_thread_fiber = main;
         m_state = State::HOLD;
         if (swapcontext(&m_ctx, &main->m_ctx))
@@ -119,7 +119,7 @@ namespace server
     /**
      * @brief 获取当前进程执行协程
      */
-    Fiber::ptr Fiber::GetThis()
+    Fiber* Fiber::GetThis()
     {
         return s_thread_fiber;
     }
@@ -127,7 +127,7 @@ namespace server
     /**
      * @brief 设置当前线程运行协程
      */
-    void Fiber::SetThis(Fiber::ptr ptr)
+    void Fiber::SetThis(Fiber* ptr)
     {
         s_thread_fiber = ptr;
     }
@@ -137,8 +137,8 @@ namespace server
      */
     void Fiber::YieldToReady()
     {
-        Fiber::ptr main = GetMain();
-        Fiber::ptr cur = GetThis();
+        Fiber* main = GetMain();
+        Fiber* cur = GetThis();
         s_thread_fiber = main;
         cur->m_state = State::READY;
         swapcontext(&cur->m_ctx, &main->m_ctx);
@@ -149,8 +149,8 @@ namespace server
      */
     void Fiber::YieldToHold()
     {
-        Fiber::ptr main = GetMain();
-        Fiber::ptr cur = GetThis();
+        Fiber* main = GetMain();
+        Fiber* cur = GetThis();
         s_thread_fiber = main;
         cur->m_state = State::HOLD;
         swapcontext(&cur->m_ctx, &main->m_ctx);
@@ -169,8 +169,8 @@ namespace server
      */
     void Fiber::MainFunc()
     {
-        Fiber::ptr main = GetMain();
-        Fiber::ptr cur = GetThis();
+        Fiber* main = GetMain();
+        Fiber* cur = GetThis();
         cur->m_state = State::EXEC;
 
         try
@@ -192,7 +192,6 @@ namespace server
         }
 
         s_thread_fiber = main;
-        std::cout << "cb over cur count " << cur.use_count() << std::endl;
         swapcontext(&cur->m_ctx, &main->m_ctx);
     }
 
@@ -207,14 +206,14 @@ namespace server
     /**
      * @brief 获取当前线程主协程 如果主协程还不存在 那么创建一个主协程 走私有构造
      */
-    Fiber::ptr Fiber::GetMain()
+    Fiber* Fiber::GetMain()
     {
         if (s_main_fiber)
         {
-            return s_main_fiber->shared_from_this();
+            return s_main_fiber;
         }
 
-        s_main_fiber = std::shared_ptr<Fiber>(new Fiber());
+        s_main_fiber = new Fiber();
         s_thread_fiber = s_main_fiber;
         return s_main_fiber;
     }
@@ -222,13 +221,17 @@ namespace server
     /**
      * @brief 设置当前线程主协程 原有的没有关联 自动走析构
      */
-    void Fiber::SetMain(Fiber::ptr &fiber)
-    {
+    void Fiber::SetMain(Fiber* fiber)
+    { 
         if (fiber)
         {
             fiber->m_ctx.uc_link = nullptr;
-            s_main_fiber = fiber;
+        } else {
+            delete s_main_fiber;
         }
+
+        s_main_fiber = fiber;
+        s_thread_fiber = fiber;
     }
 
     /**

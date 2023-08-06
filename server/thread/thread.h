@@ -10,6 +10,7 @@
 #include <atomic>
 
 #include "mutex.h"
+#include "fiber.h"
 
 namespace server
 {

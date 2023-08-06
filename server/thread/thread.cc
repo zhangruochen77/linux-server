@@ -105,6 +105,8 @@ namespace server
             {
                 err("pthrea_detach: error");
             }
+            
+            server::Fiber::SetMain(nullptr);
         }
     }
 

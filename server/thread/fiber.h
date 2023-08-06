@@ -79,22 +79,22 @@ namespace server
         /**
          * @brief 获取当前线程主协程
          */
-        static Fiber::ptr GetMain();
+        static Fiber* GetMain();
 
         /**
          * @brief 设置当前线程主协程
          */
-        static void SetMain(Fiber::ptr &fiber);
+        static void SetMain(Fiber* fiber);
 
         /**
          * @brief 获取当前执行协程
          */
-        static Fiber::ptr GetThis();
+        static Fiber* GetThis();
 
         /**
          * @brief 设置当前线程运行协程
          */
-        static void SetThis(Fiber::ptr ptr);
+        static void SetThis(Fiber* ptr);
 
         /**
          * @brief 当前协程切换到后台 转换为 READY 状态
