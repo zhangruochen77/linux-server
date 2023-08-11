@@ -2,30 +2,30 @@
 
 void fun()
 {
-    server::Fiber* fiber = server::Fiber::GetThis();
-    std::cout << "fiber start......" << std::endl;
+    server::Fiber::ptr fiber = server::Fiber::GetThis();
+    std::cout << "fiber start......" << fiber.use_count() << std::endl;
     fiber->swapOut();
-    std::cout << "fiber continue..." << std::endl;
+    std::cout << "fiber continue..." << fiber.use_count() << std::endl;
     fiber->swapOut();
-    std::cout << "fiber end........ " << std::endl;
+    std::cout << "fiber end........" << fiber.use_count() << std::endl;
+    fiber = nullptr;
 }
 
 void fun2()
 {
-    std::cout << "main start------" << std::endl;
-    server::Fiber fiber = server::Fiber(&fun, 1024);
-    fiber.swapIn();
-    std::cout << "main continue---" << std::endl;
-    fiber.swapIn();
-    std::cout << "main next-------" << std::endl;
-    std::cout << "main end--------" << std::endl;
-    server::Fiber::SetMain(nullptr);
+
+    server::Fiber::ptr fiber = std::make_shared<server::Fiber>(&fun, 10240);
+    std::cout << "main start------" << fiber.use_count() << std::endl;
+    fiber->swapIn();
+    std::cout << "main continue---" << fiber.use_count() << std::endl;
+    fiber->swapIn();
+    std::cout << "main last-------" << fiber.use_count() << std::endl;
+    fiber->swapIn();
+    std::cout << "main end--------" << fiber.use_count() << std::endl;
 }
 
 int main()
 {
     fun2();
-    int a = 1 + 11;
-    std::cout << a << std::endl;
     return 0;
 }

@@ -8,6 +8,7 @@
 #include <functional>
 #include <string>
 #include <atomic>
+#include <memory>
 
 #include "mutex.h"
 #include "fiber.h"
@@ -21,6 +22,7 @@ namespace server
     {
     public:
         typedef std::function<void()> thread_cb; // 自定义线程执行回调函数
+        typedef std::shared_ptr<Thread> ptr;
 
         Thread(thread_cb cb, const std::string &name);
         ~Thread();

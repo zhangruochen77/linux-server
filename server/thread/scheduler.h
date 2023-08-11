@@ -111,7 +111,7 @@ namespace server
         std::atomic<uint32_t> m_activeNum = {0}; // 活跃线程数量
         std::atomic<uint32_t> m_workNum = {0};   // 执行任务线程数量
         Mutex m_lock;                            // 锁变量
-        std::vector<server::Thread> m_threads;   // 线程池
+        std::vector<server::Thread::ptr> m_threads;   // 线程池
         std::vector<FiberAndCb> m_task;          // 任务队列
         bool m_stop = false;                     // 调度器是否被停止
         bool m_notice = false;                   // 是否通知其他线程执行任务

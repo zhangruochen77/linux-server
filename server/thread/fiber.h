@@ -79,22 +79,22 @@ namespace server
         /**
          * @brief 获取当前线程主协程
          */
-        static Fiber* GetMain();
+        static Fiber *GetMain();
 
         /**
          * @brief 设置当前线程主协程
          */
-        static void SetMain(Fiber* fiber);
+        static void SetMain(Fiber *fiber);
 
         /**
          * @brief 获取当前执行协程
          */
-        static Fiber* GetThis();
+        static Fiber::ptr GetThis();
 
         /**
          * @brief 设置当前线程运行协程
          */
-        static void SetThis(Fiber* ptr);
+        static void SetThis(Fiber::ptr ptr);
 
         /**
          * @brief 当前协程切换到后台 转换为 READY 状态
@@ -131,6 +131,7 @@ namespace server
         ucontext_t m_ctx;            // 协程上下文
         fiber_cb m_cb;               // 协程回调函数
         void *m_stack = nullptr;     // 栈空间指针
+        Fiber::ptr m_main = nullptr; // 协程对应的主协程
     };
 }
 

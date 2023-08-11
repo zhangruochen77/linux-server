@@ -14,15 +14,20 @@ namespace server
      * @param 线程具有数量
      * @name 调度器名称
      */
-    Scheduler::Scheduler(uint32_t threadSize = 1, const std::string &name = "")
+    Scheduler::Scheduler(uint32_t threadSize, const std::string &name)
         : m_threadSize(threadSize), m_name(name)
     {
+        INFO(g_logger) << "scheduler construct";
     }
 
-    Scheduler *Scheduler::GetThis() {}
+    Scheduler *Scheduler::GetThis()
+    {
+        return nullptr;
+    }
 
     server::Fiber *SchedulerGetMainFiber()
     {
+        return nullptr;
     }
 
     /**
@@ -30,6 +35,7 @@ namespace server
      */
     void Scheduler::start()
     {
+        INFO(g_logger) << "scheduler start";
         Lock lock(&m_lock);
         if (m_stop)
         {
@@ -38,8 +44,8 @@ namespace server
 
         for (uint32_t i = 0; i < m_threadSize; ++i)
         {
-            server::Thread t(std::bind(&Scheduler::run, this), m_name + std::to_string(i));
-            m_threads.push_back(t);
+            m_threads.push_back(std::make_shared<Thread>(std::bind(&Scheduler::run, this), m_name + std::to_string(i)));
+            ++m_activeNum;
         }
     }
 
@@ -48,6 +54,7 @@ namespace server
      */
     void Scheduler::run()
     {
+        INFO(g_logger) << "scheduler run";
         FiberAndCb *fc = nullptr;
         while (true)
         {
@@ -95,19 +102,25 @@ namespace server
             // 调度执行协程任务
             if (fc->m_fiber)
             {
+                ++m_workNum;
                 while (Fiber::EXCEPT != fc->m_fiber->getState() || Fiber::TERM != fc->m_fiber->getState())
                 {
                     fc->m_fiber->swapIn();
                 }
+
+                --m_workNum;
             }
             // 创建一个协程 执行任务
             else if (fc->m_cb)
             {
+                ++m_workNum;
                 Fiber::ptr fb = std::make_shared<Fiber>(fc->m_cb);
                 while (Fiber::EXCEPT != fb->getState() || Fiber::TERM != fb->getState())
                 {
                     fc->m_fiber->swapIn();
                 }
+
+                --m_workNum;
             }
             // 出现错误 不存在协程也不存在任务
             else
@@ -117,6 +130,8 @@ namespace server
 
             fc = nullptr;
         }
+
+        --m_activeNum;
     }
 
     /**
@@ -124,6 +139,7 @@ namespace server
      */
     void Scheduler::stop()
     {
+        INFO(g_logger) << "scheduler stop";
         m_stop = true;
         notice();
     }
@@ -141,6 +157,7 @@ namespace server
      */
     void Scheduler::schedule(FiberAndCb fac)
     {
+        INFO(g_logger) << "scheduler schedule";
         Lock lock(&m_lock);
         if (!m_stop)
         {
@@ -175,5 +192,6 @@ namespace server
     Scheduler::~Scheduler()
     {
         INFO(g_logger) << "scheduler ~ exec";
+        m_threads.clear();
     }
 }

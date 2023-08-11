@@ -2,10 +2,10 @@
 
 namespace server
 {
-    server::Logger::ptr g_log = SIG_LOG_NAME("system");
+    server::Logger::ptr g_log = SIG_LOG_ROOT();
 
     static thread_local Fiber *s_main_fiber = nullptr;          // 当前协程主协程
-    static thread_local Fiber *s_thread_fiber = nullptr;        // 当前线程中占据cpu的协程
+    static thread_local Fiber::ptr s_thread_fiber = nullptr;    // 当前线程中占据cpu的协程
     static thread_local std::atomic<uint64_t> s_fiber_count(0); // 当前线程中协程数量
     static thread_local std::atomic<uint64_t> s_fiber_id(0);    // 当前线程中线程自增id
 
@@ -45,7 +45,7 @@ namespace server
 
         GetMain();
         m_ctx.uc_link = nullptr;
-        m_ctx.uc_stack.ss_size = m_stacksize;
+        m_ctx.uc_stack.ss_size = size;
         m_ctx.uc_stack.ss_sp = m_stack;
         ASSERT_MSG(!(getcontext(&m_ctx)), "get context error");
         makecontext(&m_ctx, &Fiber::MainFunc, 0);
@@ -60,15 +60,23 @@ namespace server
      */
     Fiber::~Fiber()
     {
-        std::cout << "~Fiber exec " << this->m_id << std::endl;
+        std::cout << "~Fiber exec " << m_id << std::endl;
         if (this->m_stack)
         {
+            m_ctx.uc_stack.ss_sp = nullptr;
             MallocAllocator::Free(this->m_stack);
             m_stack = nullptr;
         }
 
         m_state = State::TERM;
-        --s_fiber_count;
+
+        // 清除主协程信息
+        if (1 == --s_fiber_count)
+        {
+            delete s_main_fiber;
+            s_main_fiber = nullptr;
+            s_thread_fiber = nullptr;
+        }
     }
 
     /**
@@ -94,11 +102,14 @@ namespace server
      */
     void Fiber::swapIn()
     {
-        Fiber* main = GetMain();
-        s_thread_fiber = this;
+        Fiber *main = GetMain();
+        s_thread_fiber = shared_from_this();
         m_state = State::EXEC;
+        std::cout << "swap in count = " << s_thread_fiber.use_count() << std::endl;
         if (swapcontext(&main->m_ctx, &m_ctx))
         {
+            ERROR(g_log)
+                << "swap in error";
         }
     }
 
@@ -107,8 +118,9 @@ namespace server
      */
     void Fiber::swapOut()
     {
-        Fiber* main = GetMain();
-        s_thread_fiber = main;
+        Fiber *main = GetMain();
+        std::cout << "swap out count = " << s_thread_fiber.use_count() << std::endl;
+        s_thread_fiber = nullptr;
         m_state = State::HOLD;
         if (swapcontext(&m_ctx, &main->m_ctx))
         {
@@ -119,15 +131,21 @@ namespace server
     /**
      * @brief 获取当前进程执行协程
      */
-    Fiber* Fiber::GetThis()
+    Fiber::ptr Fiber::GetThis()
     {
-        return s_thread_fiber;
+        if (s_thread_fiber)
+        {
+            return s_thread_fiber;
+        }
+
+        return GetMain()->shared_from_this();
+        return nullptr;
     }
 
     /**
      * @brief 设置当前线程运行协程
      */
-    void Fiber::SetThis(Fiber* ptr)
+    void Fiber::SetThis(Fiber::ptr ptr)
     {
         s_thread_fiber = ptr;
     }
@@ -137,9 +155,9 @@ namespace server
      */
     void Fiber::YieldToReady()
     {
-        Fiber* main = GetMain();
-        Fiber* cur = GetThis();
-        s_thread_fiber = main;
+        Fiber *main = GetMain();
+        Fiber::ptr cur = GetThis();
+        s_thread_fiber = nullptr;
         cur->m_state = State::READY;
         swapcontext(&cur->m_ctx, &main->m_ctx);
     }
@@ -149,9 +167,9 @@ namespace server
      */
     void Fiber::YieldToHold()
     {
-        Fiber* main = GetMain();
-        Fiber* cur = GetThis();
-        s_thread_fiber = main;
+        Fiber *main = GetMain();
+        Fiber::ptr cur = GetThis();
+        s_thread_fiber = nullptr;
         cur->m_state = State::HOLD;
         swapcontext(&cur->m_ctx, &main->m_ctx);
     }
@@ -169,30 +187,30 @@ namespace server
      */
     void Fiber::MainFunc()
     {
-        Fiber* main = GetMain();
-        Fiber* cur = GetThis();
-        cur->m_state = State::EXEC;
+        Fiber *main = GetMain();
+        std::cout << "main func count = " << s_thread_fiber.use_count() << std::endl;
+        s_thread_fiber->m_state = State::EXEC;
 
         try
         {
-            cur->m_cb();
-            cur->m_cb = fiber_cb{};
-            cur->m_state = State::TERM;
+            s_thread_fiber->m_cb();
+            s_thread_fiber->m_cb = fiber_cb{};
+            s_thread_fiber->m_state = State::TERM;
         }
         catch (std::exception &e)
         {
-            cur->m_state = State::EXCEPT;
+            s_thread_fiber->m_state = State::EXCEPT;
             ERROR(g_log)
                 << " fiber "
-                << cur->m_id
+                << s_thread_fiber->m_id
                 << "exec by exception:"
                 << e.what()
                 << std::endl
                 << server::BackTraceToString();
         }
 
-        s_thread_fiber = main;
-        swapcontext(&cur->m_ctx, &main->m_ctx);
+        std::cout << "main func over count = " << s_thread_fiber.use_count() << std::endl;
+        swapcontext(&s_thread_fiber->m_ctx, &main->m_ctx);
     }
 
     /**
@@ -200,38 +218,44 @@ namespace server
      */
     uint64_t Fiber::GetFiberId()
     {
-        return s_thread_fiber->m_id;
+        if (s_thread_fiber)
+        {
+            return s_thread_fiber->m_id;
+        }
+        else
+        {
+            return GetMain()->m_id;
+        }
     }
 
     /**
      * @brief 获取当前线程主协程 如果主协程还不存在 那么创建一个主协程 走私有构造
      */
-    Fiber* Fiber::GetMain()
+    Fiber *Fiber::GetMain()
     {
         if (s_main_fiber)
         {
             return s_main_fiber;
         }
 
-        s_main_fiber = new Fiber();
-        s_thread_fiber = s_main_fiber;
+        s_main_fiber = new Fiber;
         return s_main_fiber;
     }
 
     /**
      * @brief 设置当前线程主协程 原有的没有关联 自动走析构
      */
-    void Fiber::SetMain(Fiber* fiber)
-    { 
-        if (fiber)
+    void Fiber::SetMain(Fiber *fiber)
+    {
+        if (!fiber)
         {
-            fiber->m_ctx.uc_link = nullptr;
-        } else {
-            delete s_main_fiber;
+            s_main_fiber = nullptr;
+            s_thread_fiber = nullptr;
         }
-
-        s_main_fiber = fiber;
-        s_thread_fiber = fiber;
+        else
+        {
+            s_main_fiber = fiber;
+        }
     }
 
     /**

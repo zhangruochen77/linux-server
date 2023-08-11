@@ -32,11 +32,16 @@ CMakeFiles/server.dir/server/thread/mutex.cc.o: ../server/thread/mutex.h
 CMakeFiles/server.dir/server/thread/mutex.cc.o: ../server/utils/noncopyable.h
 CMakeFiles/server.dir/server/thread/mutex.cc.o: ../server/utils/perror_utils.h
 
+CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/config/config.h
+CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/log/log.h
+CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/thread/fiber.h
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/thread/mutex.h
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/thread/thread.cc
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/thread/thread.h
+CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/utils/macro.h
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/utils/noncopyable.h
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/utils/perror_utils.h
+CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/utils/singleton.h
 CMakeFiles/server.dir/server/thread/thread.cc.o: ../server/utils/utils.h
 
 CMakeFiles/server.dir/server/utils/utils.cc.o: ../server/utils/utils.cc

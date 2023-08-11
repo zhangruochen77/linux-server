@@ -99,14 +99,14 @@ namespace server
      */
     Thread::~Thread()
     {
+        std::cout << " thread over" << std::endl;
+
         if (m_thread)
         {
             if (pthread_detach(m_thread))
             {
                 err("pthrea_detach: error");
             }
-            
-            server::Fiber::SetMain(nullptr);
         }
     }
 

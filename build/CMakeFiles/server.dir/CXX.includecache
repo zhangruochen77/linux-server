@@ -131,8 +131,12 @@ string
 -
 atomic
 -
+memory
+-
 mutex.h
 /opt/rc/project/server/server/thread/mutex.h
+fiber.h
+/opt/rc/project/server/server/thread/fiber.h
 
 /opt/rc/project/server/server/utils/macro.h
 string
