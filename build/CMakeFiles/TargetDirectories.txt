@@ -1,4 +1,4 @@
 /opt/rc/project/server/build/CMakeFiles/edit_cache.dir
 /opt/rc/project/server/build/CMakeFiles/rebuild_cache.dir
 /opt/rc/project/server/build/CMakeFiles/server.dir
-/opt/rc/project/server/build/CMakeFiles/test_fiber.dir
+/opt/rc/project/server/build/CMakeFiles/test_sche.dir

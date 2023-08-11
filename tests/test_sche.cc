@@ -11,14 +11,16 @@ void test02() {
 
 int main() {
 
-    server::Scheduler* sche = new server::Scheduler(1, "sche");
-    server::Scheduler::FiberAndCb fc(std::make_shared<server::Fiber>(&test01));
+    server::Scheduler::ptr sche = std::make_shared<server::Scheduler>(1, "sche");
+    server::Fiber::ptr fib = std::make_shared<server::Fiber>(&test01, 4086);
+    server::Scheduler::FiberAndCb fc(fib);
     server::Scheduler::FiberAndCb fc2(&test02);
     sche->schedule(fc);
     sche->schedule(fc2);
     sche->start();
 
-    sleep(1000);
+    sleep(5);
+    std::cout << "main over" << std::endl;
     sche->stop();
     return 0;
 }

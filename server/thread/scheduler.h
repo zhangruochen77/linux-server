@@ -44,9 +44,9 @@ namespace server
             FiberAndCb() {}
 
         private:
-            server::Fiber::ptr m_fiber;     // 协程任务
-            std::function<void(void)> m_cb; // 回调任务
-            pid_t m_threadId;               // 指定执行协程的线程编号
+            server::Fiber::ptr m_fiber = nullptr;     // 协程任务
+            std::function<void(void)> m_cb = nullptr; // 回调任务
+            pid_t m_threadId;                         // 指定执行协程的线程编号
         };
 
         /**
@@ -106,15 +106,15 @@ namespace server
         void run();
 
     private:
-        uint32_t m_threadSize = 0;               // 线程总数量
-        std::string m_name;                      // 调度器名称
-        std::atomic<uint32_t> m_activeNum = {0}; // 活跃线程数量
-        std::atomic<uint32_t> m_workNum = {0};   // 执行任务线程数量
-        Mutex m_lock;                            // 锁变量
-        std::vector<server::Thread::ptr> m_threads;   // 线程池
-        std::vector<FiberAndCb> m_task;          // 任务队列
-        bool m_stop = false;                     // 调度器是否被停止
-        bool m_notice = false;                   // 是否通知其他线程执行任务
+        uint32_t m_threadSize = 0;                  // 线程总数量
+        std::string m_name;                         // 调度器名称
+        std::atomic<uint32_t> m_activeNum = {0};    // 活跃线程数量
+        std::atomic<uint32_t> m_workNum = {0};      // 执行任务线程数量
+        Mutex m_lock;                               // 锁变量
+        std::vector<server::Thread::ptr> m_threads; // 线程池
+        std::vector<FiberAndCb> m_task;             // 任务队列
+        bool m_stop = false;                        // 调度器是否被停止
+        bool m_notice = false;                      // 是否通知其他线程执行任务
     };
 }
 

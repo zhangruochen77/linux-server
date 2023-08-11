@@ -5,7 +5,7 @@
 #include "log/log.h"
 #include "thread/fiber.h"
 #include "thread/mutex.h"
-// #include "thread/scheduler.h"
+#include "thread/scheduler.h"
 #include "thread/thread.h"
 #include "utils/macro.h"
 #include "utils/noncopyable.h"

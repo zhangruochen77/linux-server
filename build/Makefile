@@ -127,17 +127,17 @@ server/fast:
 .PHONY : server/fast
 
 #=============================================================================
-# Target rules for targets named test_fiber
+# Target rules for targets named test_sche
 
 # Build rule for target.
-test_fiber: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_fiber
-.PHONY : test_fiber
+test_sche: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_sche
+.PHONY : test_sche
 
 # fast build rule for target.
-test_fiber/fast:
-	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/build
-.PHONY : test_fiber/fast
+test_sche/fast:
+	$(MAKE) -f CMakeFiles/test_sche.dir/build.make CMakeFiles/test_sche.dir/build
+.PHONY : test_sche/fast
 
 server/config/config.o: server/config/config.cc.o
 
@@ -247,6 +247,33 @@ server/thread/mutex.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/mutex.cc.s
 .PHONY : server/thread/mutex.cc.s
 
+server/thread/scheduler.o: server/thread/scheduler.cc.o
+
+.PHONY : server/thread/scheduler.o
+
+# target to build an object file
+server/thread/scheduler.cc.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/scheduler.cc.o
+.PHONY : server/thread/scheduler.cc.o
+
+server/thread/scheduler.i: server/thread/scheduler.cc.i
+
+.PHONY : server/thread/scheduler.i
+
+# target to preprocess a source file
+server/thread/scheduler.cc.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/scheduler.cc.i
+.PHONY : server/thread/scheduler.cc.i
+
+server/thread/scheduler.s: server/thread/scheduler.cc.s
+
+.PHONY : server/thread/scheduler.s
+
+# target to generate assembly for a file
+server/thread/scheduler.cc.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/thread/scheduler.cc.s
+.PHONY : server/thread/scheduler.cc.s
+
 server/thread/thread.o: server/thread/thread.cc.o
 
 .PHONY : server/thread/thread.o
@@ -301,32 +328,32 @@ server/utils/utils.cc.s:
 	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server/utils/utils.cc.s
 .PHONY : server/utils/utils.cc.s
 
-tests/test_fiber.o: tests/test_fiber.cc.o
+tests/test_sche.o: tests/test_sche.cc.o
 
-.PHONY : tests/test_fiber.o
+.PHONY : tests/test_sche.o
 
 # target to build an object file
-tests/test_fiber.cc.o:
-	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o
-.PHONY : tests/test_fiber.cc.o
+tests/test_sche.cc.o:
+	$(MAKE) -f CMakeFiles/test_sche.dir/build.make CMakeFiles/test_sche.dir/tests/test_sche.cc.o
+.PHONY : tests/test_sche.cc.o
 
-tests/test_fiber.i: tests/test_fiber.cc.i
+tests/test_sche.i: tests/test_sche.cc.i
 
-.PHONY : tests/test_fiber.i
+.PHONY : tests/test_sche.i
 
 # target to preprocess a source file
-tests/test_fiber.cc.i:
-	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cc.i
-.PHONY : tests/test_fiber.cc.i
+tests/test_sche.cc.i:
+	$(MAKE) -f CMakeFiles/test_sche.dir/build.make CMakeFiles/test_sche.dir/tests/test_sche.cc.i
+.PHONY : tests/test_sche.cc.i
 
-tests/test_fiber.s: tests/test_fiber.cc.s
+tests/test_sche.s: tests/test_sche.cc.s
 
-.PHONY : tests/test_fiber.s
+.PHONY : tests/test_sche.s
 
 # target to generate assembly for a file
-tests/test_fiber.cc.s:
-	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cc.s
-.PHONY : tests/test_fiber.cc.s
+tests/test_sche.cc.s:
+	$(MAKE) -f CMakeFiles/test_sche.dir/build.make CMakeFiles/test_sche.dir/tests/test_sche.cc.s
+.PHONY : tests/test_sche.cc.s
 
 # Help Target
 help:
@@ -337,7 +364,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... server"
-	@echo "... test_fiber"
+	@echo "... test_sche"
 	@echo "... server/config/config.o"
 	@echo "... server/config/config.i"
 	@echo "... server/config/config.s"
@@ -350,15 +377,18 @@ help:
 	@echo "... server/thread/mutex.o"
 	@echo "... server/thread/mutex.i"
 	@echo "... server/thread/mutex.s"
+	@echo "... server/thread/scheduler.o"
+	@echo "... server/thread/scheduler.i"
+	@echo "... server/thread/scheduler.s"
 	@echo "... server/thread/thread.o"
 	@echo "... server/thread/thread.i"
 	@echo "... server/thread/thread.s"
 	@echo "... server/utils/utils.o"
 	@echo "... server/utils/utils.i"
 	@echo "... server/utils/utils.s"
-	@echo "... tests/test_fiber.o"
-	@echo "... tests/test_fiber.i"
-	@echo "... tests/test_fiber.s"
+	@echo "... tests/test_sche.o"
+	@echo "... tests/test_sche.i"
+	@echo "... tests/test_sche.s"
 .PHONY : help
 
 

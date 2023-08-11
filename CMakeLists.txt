@@ -25,7 +25,7 @@ set(LIB_SRC
     server/thread/thread.cc
     server/thread/mutex.cc
     server/thread/fiber.cc
-    # server/thread/scheduler.cc
+    server/thread/scheduler.cc
     )
 
 # 添加共享库

@@ -209,8 +209,8 @@ namespace server
                 << server::BackTraceToString();
         }
 
-        std::cout << "main func over count = " << s_thread_fiber.use_count() << std::endl;
         swapcontext(&s_thread_fiber->m_ctx, &main->m_ctx);
+        ASSERT_MSG(false, "can not access area");
     }
 
     /**

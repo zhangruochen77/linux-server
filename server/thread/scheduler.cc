@@ -115,11 +115,10 @@ namespace server
             {
                 ++m_workNum;
                 Fiber::ptr fb = std::make_shared<Fiber>(fc->m_cb);
-                while (Fiber::EXCEPT != fb->getState() || Fiber::TERM != fb->getState())
+                while (Fiber::EXCEPT != fb->getState() && Fiber::TERM != fb->getState())
                 {
-                    fc->m_fiber->swapIn();
+                    fb->swapIn();
                 }
-
                 --m_workNum;
             }
             // 出现错误 不存在协程也不存在任务
